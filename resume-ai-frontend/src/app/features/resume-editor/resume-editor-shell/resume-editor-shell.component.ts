@@ -18,7 +18,10 @@ export class ResumeEditorShellComponent implements OnInit {
   loading = true;
   saving = false;
   error = '';
+  successMessage = '';
   showAddSection = false;
+  showTemplateSwitcher = false;
+  pendingTemplateId: number | null = null;
   resume: ResumeEditorResume | null = null;
   templates: ResumeTemplate[] = [];
   sectionTemplates: ResumeSectionTemplate[] = [];
@@ -82,13 +85,34 @@ export class ResumeEditorShellComponent implements OnInit {
     this.state = { ...this.state, activeTab: tab };
   }
 
-  onTemplateChange(templateId: number): void {
+  openTemplateSwitcher(): void {
+    this.pendingTemplateId = this.resume?.templateId ?? null;
+    this.showTemplateSwitcher = true;
+  }
+
+  cancelTemplateSwitch(): void {
+    this.showTemplateSwitcher = false;
+    this.pendingTemplateId = null;
+  }
+
+  applyTemplateSwitch(): void {
     if (!this.resume) {
       return;
     }
+    if (!this.pendingTemplateId || this.pendingTemplateId === this.resume.templateId) {
+      this.cancelTemplateSwitch();
+      return;
+    }
+    if (!confirm('Your content will remain safe. Only the design will change.')) {
+      return;
+    }
     this.saving = true;
-    this.resumeService.updateEditorResume(this.resume.id, { templateId, title: this.resume.title }).subscribe({
-      next: (resume) => this.applyResume(resume),
+    this.resumeService.switchEditorTemplate(this.resume.id, this.pendingTemplateId).subscribe({
+      next: (resume) => {
+        this.applyResume(resume);
+        this.successMessage = 'Template changed successfully. Your content is preserved.';
+        this.cancelTemplateSwitch();
+      },
       error: (error) => this.handleError(error, 'Failed to switch template.')
     });
   }
@@ -276,6 +300,7 @@ export class ResumeEditorShellComponent implements OnInit {
   private handleError(error: any, fallback: string): void {
     this.loading = false;
     this.saving = false;
+    this.successMessage = '';
     this.error = error?.error?.message ?? fallback;
   }
 }

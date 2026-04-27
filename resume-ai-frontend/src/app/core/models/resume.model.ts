@@ -82,6 +82,10 @@ export interface ResumeEditorResume {
   id: number;
   templateId: number;
   templateName: string;
+  templateKey: string;
+  templateLayoutType: string;
+  templateStyleType: string;
+  templateSupportedSectionsJson: string;
   title: string;
   themeJson: string;
   status: string;
@@ -93,6 +97,8 @@ export interface ResumeEditorResume {
   premiumTemplate: boolean;
   canEdit: boolean;
   watermarkEnabled: boolean;
+  hiddenUnsupportedSectionCount: number;
+  hiddenUnsupportedSections: string[];
   sections: ResumeSection[];
   createdAt: string;
   updatedAt: string;

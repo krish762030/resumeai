@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { forkJoin, of, switchMap } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { ResumeAnalysis } from '../../core/models/analysis.model';
@@ -32,7 +33,8 @@ export class DashboardComponent implements OnInit {
     private readonly authService: AuthService,
     private readonly resumeService: ResumeService,
     private readonly jobService: JobService,
-    private readonly resumeBuilderLocalService: ResumeBuilderLocalService
+    private readonly resumeBuilderLocalService: ResumeBuilderLocalService,
+    private readonly router: Router
   ) {
   }
 
@@ -64,11 +66,59 @@ export class DashboardComponent implements OnInit {
     return !!this.usageLimit?.premium;
   }
 
+  get recentGeneratedResumes(): GeneratedResume[] {
+    return this.generatedResumes.slice(0, 3);
+  }
+
+  get latestGeneratedResume(): GeneratedResume | null {
+    return this.generatedResumes[0] ?? null;
+  }
+
+  get latestAnalysisRoute(): string[] {
+    if (this.latestResume) {
+      return ['/resume', String(this.latestResume.id), 'analysis'];
+    }
+    return ['/resume/upload'];
+  }
+
+  get dashboardScore(): number {
+    return this.latestAnalysis?.atsScore ?? 0;
+  }
+
+  get scoreStatus(): string {
+    return this.dashboardScore >= 75 ? 'Good' : 'Needs improvement';
+  }
+
+  get completionChecklist(): Array<{ label: string; done: boolean }> {
+    const payload = this.latestGeneratedResume?.resumeDataJson?.toLowerCase() ?? '';
+    return [
+      { label: 'Summary added', done: payload.includes('summary') || payload.includes('headline') },
+      { label: 'Experience added', done: payload.includes('experience') },
+      { label: 'Skills added', done: payload.includes('skills') },
+      { label: 'Education added', done: payload.includes('education') },
+      { label: 'Projects added', done: payload.includes('projects') },
+      { label: 'Certifications added', done: payload.includes('certifications') }
+    ];
+  }
+
+  logout(): void {
+    this.authService.logout();
+    void this.router.navigate(['/auth/login']);
+  }
+
   templateUseRoute(template: ResumeTemplate): string[] {
     if (template.premium && !this.isPremiumUser) {
       return ['/pricing'];
     }
     return ['/resume-builder/create', String(template.id)];
+  }
+
+  editorRoute(resumeId: number): string[] {
+    return ['/resume-builder/edit', String(resumeId)];
+  }
+
+  changeTemplateRoute(resumeId: number): string[] {
+    return ['/resume-editor', String(resumeId), 'change-template'];
   }
 
   private loadDashboard(): void {

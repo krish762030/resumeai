@@ -12,6 +12,10 @@ public record ResumeEditorResponse(
         Long id,
         Long templateId,
         String templateName,
+        String templateKey,
+        String templateLayoutType,
+        String templateStyleType,
+        String templateSupportedSectionsJson,
         String title,
         String themeJson,
         String status,
@@ -23,6 +27,8 @@ public record ResumeEditorResponse(
         boolean premiumTemplate,
         boolean canEdit,
         boolean watermarkEnabled,
+        int hiddenUnsupportedSectionCount,
+        List<String> hiddenUnsupportedSections,
         List<ResumeSectionResponse> sections,
         Instant createdAt,
         Instant updatedAt
@@ -32,12 +38,17 @@ public record ResumeEditorResponse(
             List<ResumeSection> sections,
             PlanType planType,
             boolean canEdit,
-            boolean watermarkEnabled
+            boolean watermarkEnabled,
+            List<String> hiddenUnsupportedSections
     ) {
         return new ResumeEditorResponse(
                 resume.getId(),
                 resume.getTemplate().getId(),
                 resume.getTemplate().getName(),
+                resume.getTemplate().getTemplateKey(),
+                resume.getTemplate().getLayoutType(),
+                resume.getTemplate().getStyleType(),
+                resume.getTemplate().getSupportedSectionsJson(),
                 resume.getTitle(),
                 resume.getThemeJson(),
                 resume.getStatus() == null ? ResumeEditorStatus.DRAFT.name() : resume.getStatus().name(),
@@ -49,6 +60,8 @@ public record ResumeEditorResponse(
                 resume.getTemplate().isPremium(),
                 canEdit,
                 watermarkEnabled,
+                hiddenUnsupportedSections.size(),
+                hiddenUnsupportedSections,
                 sections.stream().map(ResumeSectionResponse::from).toList(),
                 resume.getCreatedAt(),
                 resume.getUpdatedAt()

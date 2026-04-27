@@ -47,6 +47,8 @@ const routes: Routes = [
       { path: 'resume-builder/create/:templateId', component: ResumeEditorShellComponent, canActivate: [AuthGuard] },
       { path: 'resume-builder/preview/:resumeId', component: ResumePreviewComponent },
       { path: 'resume-builder/edit/:resumeId', component: ResumeEditorShellComponent, canActivate: [AuthGuard] },
+      { path: 'resume-editor/:resumeId', component: ResumeEditorShellComponent, canActivate: [AuthGuard] },
+      { path: 'resume-editor/:resumeId/change-template', component: ResumeEditorShellComponent, canActivate: [AuthGuard] },
       { path: 'admin/templates', component: TemplateManageComponent, canActivate: [AuthGuard] },
       { path: 'admin/templates/upload', component: TemplateUploadComponent, canActivate: [AuthGuard] },
       { path: 'pricing', component: PricingComponent }

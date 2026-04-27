@@ -17,9 +17,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Locale;
 import java.util.Set;
 
 @Service
@@ -45,6 +48,7 @@ public class ResumeEditorService {
     private final ResumeBuilderRenderer resumeBuilderRenderer;
     private final UserService userService;
     private final SubscriptionService subscriptionService;
+    private final TemplateChangeHistoryRepository templateChangeHistoryRepository;
     private final ObjectMapper objectMapper;
 
     public List<ResumeEditorResponse> getMyResumes() {
@@ -100,8 +104,23 @@ public class ResumeEditorService {
         boolean premium = isPremium(planType);
 
         ResumeTemplate template = validateTemplateAccess(request.templateId(), premium);
+        recordTemplateChange(resume, template.getId());
         resume.setTemplate(template);
         resume.setTitle(request.title().trim());
+        refreshRenderedState(resume, premium);
+        return toResponse(resume, planType, premium);
+    }
+
+    @Transactional
+    public ResumeEditorResponse switchTemplate(Long resumeId, ResumeTemplateSwitchRequest request) {
+        User user = userService.getCurrentUser();
+        UserGeneratedResume resume = getOwnedResume(resumeId, user);
+        PlanType planType = subscriptionService.resolvePlan(user);
+        boolean premium = isPremium(planType);
+
+        ResumeTemplate template = validateTemplateAccess(request.templateId(), premium);
+        recordTemplateChange(resume, template.getId());
+        resume.setTemplate(template);
         refreshRenderedState(resume, premium);
         return toResponse(resume, planType, premium);
     }
@@ -311,17 +330,28 @@ public class ResumeEditorService {
 
     private ResumeEditorResponse toResponse(UserGeneratedResume resume, PlanType planType, boolean premium) {
         List<ResumeSection> sections = resumeSectionRepository.findByResumeOrderBySectionOrderAsc(resume);
-        return ResumeEditorResponse.from(resume, sections, planType, true, !premium);
+        return ResumeEditorResponse.from(
+                resume,
+                sections,
+                planType,
+                true,
+                !premium,
+                resolveUnsupportedSectionTitles(resume.getTemplate(), sections)
+        );
     }
 
     private void refreshRenderedState(UserGeneratedResume resume, boolean premium) {
         List<ResumeSection> sections = resumeSectionRepository.findByResumeOrderBySectionOrderAsc(resume);
         String snapshotJson = buildSnapshotJson(resume, sections);
+        Set<String> supportedSections = resolveSupportedSections(resume.getTemplate());
+        List<ResumeSection> renderableSections = sections.stream()
+                .filter(section -> supportedSections.contains(normalizeSectionType(section.getSectionType())))
+                .toList();
         resume.setResumeDataJson(snapshotJson);
         resume.setGeneratedHtml(resumeBuilderRenderer.renderDynamic(
                 resume.getTitle(),
                 compactJson(resume.getThemeJson()),
-                sections,
+                renderableSections,
                 !premium,
                 resume.getTemplate().getHtmlTemplateContent()
         ));
@@ -372,5 +402,43 @@ public class ResumeEditorService {
 
     private boolean isPremium(PlanType planType) {
         return planType != PlanType.FREE;
+    }
+
+    private void recordTemplateChange(UserGeneratedResume resume, Long newTemplateId) {
+        Long oldTemplateId = resume.getTemplate().getId();
+        if (oldTemplateId.equals(newTemplateId)) {
+            return;
+        }
+        templateChangeHistoryRepository.save(TemplateChangeHistory.builder()
+                .resumeId(resume.getId())
+                .oldTemplateId(oldTemplateId)
+                .newTemplateId(newTemplateId)
+                .build());
+    }
+
+    private List<String> resolveUnsupportedSectionTitles(ResumeTemplate template, List<ResumeSection> sections) {
+        Set<String> supported = resolveSupportedSections(template);
+        return sections.stream()
+                .filter(section -> !supported.contains(normalizeSectionType(section.getSectionType())))
+                .sorted(Comparator.comparingInt(ResumeSection::getSectionOrder))
+                .map(ResumeSection::getSectionTitle)
+                .distinct()
+                .toList();
+    }
+
+    private Set<String> resolveSupportedSections(ResumeTemplate template) {
+        try {
+            List<String> sections = objectMapper.readValue(template.getSupportedSectionsJson(), new TypeReference<>() {
+            });
+            Set<String> normalized = new LinkedHashSet<>();
+            sections.forEach(value -> normalized.add(normalizeSectionType(value)));
+            return normalized;
+        } catch (Exception ignored) {
+            return Set.of("SUMMARY", "EXPERIENCE", "SKILLS", "EDUCATION", "PROJECTS", "CERTIFICATIONS", "COURSES", "LANGUAGES");
+        }
+    }
+
+    private String normalizeSectionType(String value) {
+        return value == null ? "" : value.trim().toUpperCase(Locale.ROOT);
     }
 }

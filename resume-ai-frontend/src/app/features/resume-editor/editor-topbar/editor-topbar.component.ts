@@ -10,6 +10,6 @@ export class EditorTopbarComponent {
   @Input() templates: ResumeTemplate[] = [];
   @Input() activeTab: 'overview' | 'content' | 'customize' | 'ai' = 'content';
   @Output() activeTabChange = new EventEmitter<'overview' | 'content' | 'customize' | 'ai'>();
-  @Output() templateChange = new EventEmitter<number>();
+  @Output() openTemplateSwitcher = new EventEmitter<void>();
   @Output() download = new EventEmitter<void>();
 }
