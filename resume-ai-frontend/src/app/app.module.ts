@@ -15,6 +15,7 @@ import { JobListComponent } from './features/jobs/job-list/job-list.component';
 import { JobMatchesComponent } from './features/jobs/job-matches/job-matches.component';
 import { PricingComponent } from './features/pricing/pricing.component';
 import { ResumeAnalysisComponent } from './features/resume/resume-analysis/resume-analysis.component';
+import { MyResumesComponent } from './features/resumes/my-resumes/my-resumes.component';
 import { ResumeDetailComponent } from './features/resume/resume-detail/resume-detail.component';
 import { UploadResumeComponent } from './features/resume/upload-resume/upload-resume.component';
 import { ResumeEditorComponent } from './features/resume-builder/resume-editor/resume-editor.component';
@@ -64,6 +65,7 @@ import { JoinListPipe } from './shared/pipes/join-list.pipe';
     UploadResumeComponent,
     ResumeDetailComponent,
     ResumeAnalysisComponent,
+    MyResumesComponent,
     JobListComponent,
     JobMatchesComponent,
     PricingComponent,

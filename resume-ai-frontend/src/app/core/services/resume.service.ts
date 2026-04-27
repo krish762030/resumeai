@@ -171,6 +171,10 @@ export class ResumeService {
     return this.http.delete<void>(`${this.editorBaseUrl}/${resumeId}`);
   }
 
+  duplicateEditorResume(resumeId: number): Observable<ResumeEditorResume> {
+    return this.http.post<ResumeEditorResume>(`${this.apiUrl}/resumes/${resumeId}/duplicate`, {});
+  }
+
   addEditorSection(resumeId: number, payload: { sectionType: string; sectionTitle: string; isVisible: boolean; contentJson: string; }): Observable<ResumeEditorResume> {
     return this.http.post<ResumeEditorResume>(`${this.editorBaseUrl}/${resumeId}/sections`, payload);
   }

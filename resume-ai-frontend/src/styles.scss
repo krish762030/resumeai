@@ -150,3 +150,5 @@ body {
   border-top: 1px solid #e5e7eb;
   padding-top: 1.25rem;
 }
+
+.menu-item { @apply w-full rounded-xl px-3 py-2 text-left text-sm font-medium text-[#17172b] hover:bg-[#f5f7ff]; }

@@ -50,6 +50,46 @@ public class ResumeEditorController {
         resumeEditorService.deleteResume(resumeId);
     }
 
+
+    @GetMapping("/api/resumes/{resumeId}/sections")
+    public List<ResumeSectionResponse> getSectionsAlias(@PathVariable Long resumeId) {
+        return resumeEditorService.getSections(resumeId);
+    }
+
+    @PostMapping("/api/resumes/{resumeId}/sections")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResumeEditorResponse addSectionAlias(@PathVariable Long resumeId, @Valid @RequestBody ResumeSectionRequest request) {
+        return resumeEditorService.addSection(resumeId, request);
+    }
+
+    @PutMapping("/api/resumes/{resumeId}/sections/{sectionId}")
+    public ResumeEditorResponse updateSectionAlias(
+            @PathVariable Long resumeId,
+            @PathVariable Long sectionId,
+            @Valid @RequestBody ResumeSectionRequest request
+    ) {
+        return resumeEditorService.updateSection(resumeId, sectionId, request);
+    }
+
+    @DeleteMapping("/api/resumes/{resumeId}/sections/{sectionId}")
+    public ResumeEditorResponse deleteSectionAlias(@PathVariable Long resumeId, @PathVariable Long sectionId) {
+        return resumeEditorService.deleteSection(resumeId, sectionId);
+    }
+
+    @PatchMapping("/api/resumes/{resumeId}/sections/reorder")
+    public ResumeEditorResponse reorderSectionsAlias(
+            @PathVariable Long resumeId,
+            @Valid @RequestBody ResumeSectionReorderRequest request
+    ) {
+        return resumeEditorService.reorderSections(resumeId, request);
+    }
+
+    @PostMapping("/api/resumes/{resumeId}/duplicate")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResumeEditorResponse duplicateResume(@PathVariable Long resumeId) {
+        return resumeEditorService.duplicateResume(resumeId);
+    }
+
     @GetMapping("/api/resume-builder/editor/resumes/{resumeId}/sections")
     public List<ResumeSectionResponse> getSections(@PathVariable Long resumeId) {
         return resumeEditorService.getSections(resumeId);

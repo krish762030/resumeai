@@ -125,6 +125,49 @@ public class ResumeEditorService {
         return toResponse(resume, planType, premium);
     }
 
+
+    @Transactional
+    public ResumeEditorResponse duplicateResume(Long resumeId) {
+        User user = userService.getCurrentUser();
+        UserGeneratedResume source = getOwnedResume(resumeId, user);
+        PlanType planType = subscriptionService.resolvePlan(user);
+        boolean premium = isPremium(planType);
+
+        if (!premium && userGeneratedResumeRepository.countByUser(user) >= 1) {
+            throw new BadRequestException("Free plan supports only 1 created resume. Upgrade for more.");
+        }
+
+        UserGeneratedResume copy = userGeneratedResumeRepository.save(UserGeneratedResume.builder()
+                .user(user)
+                .template(source.getTemplate())
+                .title(source.getTitle() + " Copy")
+                .themeJson(source.getThemeJson())
+                .status(ResumeEditorStatus.DRAFT)
+                .resumeDataJson(source.getResumeDataJson())
+                .generatedHtml(source.getGeneratedHtml())
+                .generatedPdfUrl(null)
+                .editCount(0)
+                .downloadCount(0)
+                .build());
+
+        List<ResumeSection> sourceSections = resumeSectionRepository.findByResumeOrderBySectionOrderAsc(source);
+        List<ResumeSection> copiedSections = new ArrayList<>();
+        for (ResumeSection sourceSection : sourceSections) {
+            copiedSections.add(ResumeSection.builder()
+                    .resume(copy)
+                    .sectionType(sourceSection.getSectionType())
+                    .sectionTitle(sourceSection.getSectionTitle())
+                    .sectionOrder(sourceSection.getSectionOrder())
+                    .visible(sourceSection.isVisible())
+                    .contentJson(sourceSection.getContentJson())
+                    .build());
+        }
+        resumeSectionRepository.saveAll(copiedSections);
+
+        refreshRenderedState(copy, premium);
+        return toResponse(copy, planType, premium);
+    }
+
     @Transactional
     public void deleteResume(Long resumeId) {
         User user = userService.getCurrentUser();
