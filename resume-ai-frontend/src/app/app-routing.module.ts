@@ -12,17 +12,16 @@ import { JobMatchesComponent } from './features/jobs/job-matches/job-matches.com
 import { ResumeAnalysisComponent } from './features/resume/resume-analysis/resume-analysis.component';
 import { ResumeDetailComponent } from './features/resume/resume-detail/resume-detail.component';
 import { UploadResumeComponent } from './features/resume/upload-resume/upload-resume.component';
-import { ResumeEditorComponent } from './features/resume-builder/resume-editor/resume-editor.component';
-import { ResumeFormComponent } from './features/resume-builder/resume-form/resume-form.component';
 import { ResumePreviewComponent } from './features/resume-builder/resume-preview/resume-preview.component';
 import { TemplateDashboardComponent } from './features/resume-builder/template-dashboard/template-dashboard.component';
-import { TemplateListComponent } from './features/resume-builder/template-list/template-list.component';
 import { TemplatePreviewPageComponent } from './features/resume-builder/template-preview-page/template-preview-page.component';
 import { ResumeEditorShellComponent } from './features/resume-editor/resume-editor-shell/resume-editor-shell.component';
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 
 const routes: Routes = [
+  { path: 'login', redirectTo: 'auth/login', pathMatch: 'full' },
+  { path: 'register', redirectTo: 'auth/register', pathMatch: 'full' },
   {
     path: 'auth',
     component: AuthLayoutComponent,
@@ -44,11 +43,10 @@ const routes: Routes = [
       { path: 'resume/:id', component: ResumeDetailComponent, canActivate: [AuthGuard] },
       { path: 'resume/:id/analysis', component: ResumeAnalysisComponent, canActivate: [AuthGuard] },
       { path: 'resume/:id/jobs', component: JobMatchesComponent, canActivate: [AuthGuard] },
-      { path: 'templates', component: TemplateDashboardComponent },
-      { path: 'templates/:templateId/preview', component: TemplatePreviewPageComponent },
-      { path: 'resume-builder/templates', component: TemplateDashboardComponent },
+      { path: 'templates', component: TemplateDashboardComponent, canActivate: [AuthGuard] },
+      { path: 'templates/:templateId/preview', component: TemplatePreviewPageComponent, canActivate: [AuthGuard] },
       { path: 'resume-builder/create/:templateId', component: ResumeEditorShellComponent, canActivate: [AuthGuard] },
-      { path: 'resume-builder/preview/:resumeId', component: ResumePreviewComponent },
+      { path: 'resume-builder/preview/:resumeId', component: ResumePreviewComponent, canActivate: [AuthGuard] },
       { path: 'resume-builder/edit/:resumeId', component: ResumeEditorShellComponent, canActivate: [AuthGuard] },
       { path: 'resume-editor/:resumeId', component: ResumeEditorShellComponent, canActivate: [AuthGuard] },
       { path: 'resume-editor/:resumeId/:tab', component: ResumeEditorShellComponent, canActivate: [AuthGuard] },

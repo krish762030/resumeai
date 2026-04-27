@@ -126,7 +126,7 @@ export class TemplateDashboardComponent implements OnInit {
 
   onUseTemplate(template: ResumeTemplate): void {
     if (!this.authService.isAuthenticated()) {
-      void this.router.navigate(['/auth/login'], {
+      void this.router.navigate(['/login'], {
         queryParams: { returnUrl: `/resume-builder/create/${template.id}` }
       });
       return;

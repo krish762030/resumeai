@@ -37,7 +37,7 @@ export class ResumePreviewComponent implements OnInit {
     }
 
     if (!this.authService.isAuthenticated()) {
-      this.router.navigate(['/auth/login'], {
+      this.router.navigate(['/login'], {
         queryParams: {
           returnUrl: `/resume-builder/preview/${this.resume.id}?download=1`
         }

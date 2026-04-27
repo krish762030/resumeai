@@ -10,11 +10,13 @@ import com.resumeai.subscription.PlanType;
 import com.resumeai.subscription.SubscriptionService;
 import com.resumeai.template.ResumeTemplate;
 import com.resumeai.template.ResumeTemplateService;
+import com.resumeai.template.ResumeTemplateRepository;
 import com.resumeai.user.User;
 import com.resumeai.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -45,6 +47,7 @@ public class ResumeEditorService {
     private final ResumeSectionRepository resumeSectionRepository;
     private final SectionTemplateRepository sectionTemplateRepository;
     private final ResumeTemplateService resumeTemplateService;
+    private final ResumeTemplateRepository resumeTemplateRepository;
     private final ResumeBuilderRenderer resumeBuilderRenderer;
     private final UserService userService;
     private final SubscriptionService subscriptionService;
@@ -381,6 +384,10 @@ public class ResumeEditorService {
                 !premium,
                 resolveUnsupportedSectionTitles(resume.getTemplate(), sections)
         );
+    }
+
+    private String escapeJson(String value) {
+        return value.replace("\\", "\\\\").replace(""", "\\"").replace("\n", " ").replace("\r", " ").trim();
     }
 
     private void refreshRenderedState(UserGeneratedResume resume, boolean premium) {
