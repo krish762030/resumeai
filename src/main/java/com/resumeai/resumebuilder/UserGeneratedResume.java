@@ -38,6 +38,14 @@ public class UserGeneratedResume {
     private String title;
 
     @Lob
+    @Column(name = "theme_json", nullable = false, columnDefinition = "LONGTEXT")
+    private String themeJson;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private ResumeEditorStatus status;
+
+    @Lob
     @Column(name = "resume_data_json", nullable = false, columnDefinition = "LONGTEXT")
     private String resumeDataJson;
 

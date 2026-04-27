@@ -77,6 +77,8 @@ public class ResumeBuilderService {
                 .user(user)
                 .template(template)
                 .title(request.title().trim())
+                .themeJson("{}")
+                .status(ResumeEditorStatus.READY)
                 .resumeDataJson(request.resumeDataJson())
                 .generatedHtml(generatedHtml)
                 .generatedPdfUrl(null)
@@ -105,6 +107,12 @@ public class ResumeBuilderService {
 
         resume.setTemplate(template);
         resume.setTitle(request.title().trim());
+        if (resume.getThemeJson() == null) {
+            resume.setThemeJson("{}");
+        }
+        if (resume.getStatus() == null) {
+            resume.setStatus(ResumeEditorStatus.READY);
+        }
         resume.setResumeDataJson(request.resumeDataJson());
         resume.setGeneratedHtml(resumeBuilderRenderer.render(
                 request.title(),

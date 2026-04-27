@@ -15,6 +15,7 @@ import { ResumeService } from '../../core/services/resume.service';
   templateUrl: './dashboard.component.html'
 })
 export class DashboardComponent implements OnInit {
+  readonly dashboardTemplateNames = ['ATS Internship', 'Fresher Software Developer', 'Professional One Page'];
   loading = true;
   guestMode = false;
   user: User | null = null;
@@ -53,6 +54,23 @@ export class DashboardComponent implements OnInit {
     this.loadDashboard();
   }
 
+  get recommendedTemplates(): ResumeTemplate[] {
+    return this.dashboardTemplateNames
+      .map((name) => this.publicTemplates.find((template) => template.name === name))
+      .filter((template): template is ResumeTemplate => !!template);
+  }
+
+  get isPremiumUser(): boolean {
+    return !!this.usageLimit?.premium;
+  }
+
+  templateUseRoute(template: ResumeTemplate): string[] {
+    if (template.premium && !this.isPremiumUser) {
+      return ['/pricing'];
+    }
+    return ['/resume-builder/create', String(template.id)];
+  }
+
   private loadDashboard(): void {
     this.loading = true;
     this.authService.getProfile().pipe(
@@ -61,13 +79,15 @@ export class DashboardComponent implements OnInit {
         return forkJoin({
           resumes: this.resumeService.getResumes(),
           generatedResumes: this.resumeService.getGeneratedResumes().pipe(catchError(() => of([]))),
-          usageLimit: this.resumeService.getUsageLimit().pipe(catchError(() => of(null)))
+          usageLimit: this.resumeService.getUsageLimit().pipe(catchError(() => of(null))),
+          templates: this.resumeService.getTemplates().pipe(catchError(() => of([])))
         });
       }),
-      switchMap(({ resumes, generatedResumes, usageLimit }) => {
+      switchMap(({ resumes, generatedResumes, usageLimit, templates }) => {
         this.resumes = resumes;
         this.generatedResumes = generatedResumes;
         this.usageLimit = usageLimit;
+        this.publicTemplates = templates;
         this.latestResume = resumes[0] ?? null;
 
         if (!this.latestResume) {

@@ -3,16 +3,24 @@ import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { ResumeAnalysis } from '../models/analysis.model';
-import { GeneratedResume, ResumeResponse, ResumeTemplate, UsageLimit } from '../models/resume.model';
+import {
+  GeneratedResume,
+  ResumeEditorResume,
+  ResumeResponse,
+  ResumeSection,
+  ResumeSectionTemplate,
+  ResumeTemplate,
+  UsageLimit
+} from '../models/resume.model';
 
 @Injectable({ providedIn: 'root' })
 export class ResumeService {
   private readonly apiUrl = environment.apiBaseUrl;
+  private readonly editorBaseUrl = `${environment.apiBaseUrl}/resume-builder/editor/resumes`;
+  private readonly assetBaseUrl = environment.apiBaseUrl.replace(/\/api$/, '');
 
   constructor(private readonly http: HttpClient) {
   }
-
-  private readonly assetBaseUrl = environment.apiBaseUrl.replace(/\/api$/, '');
 
   getResumes(): Observable<ResumeResponse[]> {
     return this.http.get<ResumeResponse[]>(`${this.apiUrl}/resumes`);
@@ -44,7 +52,49 @@ export class ResumeService {
   }
 
   getTemplates(): Observable<ResumeTemplate[]> {
-    return this.http.get<ResumeTemplate[]>(`${this.apiUrl}/templates`).pipe(
+    return this.getTemplatesFiltered({}).pipe(
+      map((templates) => templates.map((template) => this.mapTemplate(template)))
+    );
+  }
+
+  getTemplatesFiltered(filters: {
+    search?: string;
+    roleType?: string;
+    experience?: string;
+    layout?: string;
+    style?: string;
+    isAtsFriendly?: boolean;
+    isPremium?: boolean;
+    category?: string;
+  }): Observable<ResumeTemplate[]> {
+    const params = new URLSearchParams();
+    if (filters.search) {
+      params.set('search', filters.search);
+    }
+    if (filters.roleType) {
+      params.set('roleType', filters.roleType);
+    }
+    if (filters.experience) {
+      params.set('experience', filters.experience);
+    }
+    if (filters.layout) {
+      params.set('layout', filters.layout);
+    }
+    if (filters.style) {
+      params.set('style', filters.style);
+    }
+    if (filters.isAtsFriendly !== undefined) {
+      params.set('isAtsFriendly', String(filters.isAtsFriendly));
+    }
+    if (filters.isPremium !== undefined) {
+      params.set('isPremium', String(filters.isPremium));
+    }
+    if (filters.category) {
+      params.set('category', filters.category);
+    }
+
+    const query = params.toString();
+    return this.http.get<ResumeTemplate[]>(`${this.apiUrl}/templates${query ? `?${query}` : ''}`).pipe(
       map((templates) => templates.map((template) => this.mapTemplate(template)))
     );
   }
@@ -95,6 +145,70 @@ export class ResumeService {
 
   getUsageLimit(): Observable<UsageLimit> {
     return this.http.get<UsageLimit>(`${this.apiUrl}/usage-limit/me`);
+  }
+
+  getEditorResumes(): Observable<ResumeEditorResume[]> {
+    return this.http.get<ResumeEditorResume[]>(this.editorBaseUrl);
+  }
+
+  createEditorResume(payload: { templateId: number; title: string; }): Observable<ResumeEditorResume> {
+    return this.http.post<ResumeEditorResume>(this.editorBaseUrl, payload);
+  }
+
+  getEditorResume(resumeId: number): Observable<ResumeEditorResume> {
+    return this.http.get<ResumeEditorResume>(`${this.editorBaseUrl}/${resumeId}`);
+  }
+
+  updateEditorResume(resumeId: number, payload: { templateId: number; title: string; }): Observable<ResumeEditorResume> {
+    return this.http.put<ResumeEditorResume>(`${this.editorBaseUrl}/${resumeId}`, payload);
+  }
+
+  deleteEditorResume(resumeId: number): Observable<void> {
+    return this.http.delete<void>(`${this.editorBaseUrl}/${resumeId}`);
+  }
+
+  addEditorSection(resumeId: number, payload: { sectionType: string; sectionTitle: string; isVisible: boolean; contentJson: string; }): Observable<ResumeEditorResume> {
+    return this.http.post<ResumeEditorResume>(`${this.editorBaseUrl}/${resumeId}/sections`, payload);
+  }
+
+  updateEditorSection(resumeId: number, sectionId: number, payload: { sectionType: string; sectionTitle: string; isVisible: boolean; contentJson: string; }): Observable<ResumeEditorResume> {
+    return this.http.put<ResumeEditorResume>(`${this.editorBaseUrl}/${resumeId}/sections/${sectionId}`, payload);
+  }
+
+  deleteEditorSection(resumeId: number, sectionId: number): Observable<ResumeEditorResume> {
+    return this.http.delete<ResumeEditorResume>(`${this.editorBaseUrl}/${resumeId}/sections/${sectionId}`);
+  }
+
+  reorderEditorSections(resumeId: number, items: Array<{ sectionId: number; sectionOrder: number }>): Observable<ResumeEditorResume> {
+    return this.http.patch<ResumeEditorResume>(`${this.editorBaseUrl}/${resumeId}/sections/reorder`, { items });
+  }
+
+  updateEditorSectionVisibility(resumeId: number, sectionId: number, isVisible: boolean): Observable<ResumeEditorResume> {
+    return this.http.patch<ResumeEditorResume>(`${this.editorBaseUrl}/${resumeId}/sections/${sectionId}/visibility`, { isVisible });
+  }
+
+  getEditorTheme(resumeId: number): Observable<{ themeJson: string }> {
+    return this.http.get<{ themeJson: string }>(`${this.editorBaseUrl}/${resumeId}/theme`);
+  }
+
+  updateEditorTheme(resumeId: number, themeJson: string): Observable<ResumeEditorResume> {
+    return this.http.put<ResumeEditorResume>(`${this.editorBaseUrl}/${resumeId}/theme`, { themeJson });
+  }
+
+  previewEditorResume(resumeId: number): Observable<ResumeEditorResume> {
+    return this.http.post<ResumeEditorResume>(`${this.editorBaseUrl}/${resumeId}/preview`, {});
+  }
+
+  getSectionTemplates(): Observable<ResumeSectionTemplate[]> {
+    return this.http.get<ResumeSectionTemplate[]>(`${this.apiUrl}/section-templates`);
+  }
+
+  parseSectionContent(section: ResumeSection): Record<string, unknown> {
+    try {
+      return JSON.parse(section.contentJson) as Record<string, unknown>;
+    } catch {
+      return {};
+    }
   }
 
   private mapTemplate(template: ResumeTemplate): ResumeTemplate {

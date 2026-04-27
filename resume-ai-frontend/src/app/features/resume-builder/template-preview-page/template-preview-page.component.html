@@ -1,0 +1,20 @@
+<app-loader *ngIf="loading" message="Loading template preview"></app-loader>
+
+<div *ngIf="!loading && template" class="space-y-6">
+  <div class="shell-card p-8">
+    <a routerLink="/templates" class="text-sm font-semibold text-[#5b5cf0]">Back to templates</a>
+  </div>
+
+  <div class="grid gap-6 xl:grid-cols-[1.08fr_0.92fr]">
+    <app-template-preview-modal
+      [template]="template"
+      [favorite]="isFavorite"
+      (toggleFavorite)="toggleFavorite()">
+    </app-template-preview-modal>
+    <app-template-customize-before-use
+      [template]="template"
+      [canUseTemplate]="canUseTemplate"
+      (useTemplate)="onUseTemplate()">
+    </app-template-customize-before-use>
+  </div>
+</div>

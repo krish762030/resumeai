@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="840" viewBox="0 0 600 840">
+  <rect width="600" height="840" rx="28" fill="#fff7ed"/>
+  <rect x="42" y="30" width="516" height="780" rx="22" fill="#ffffff"/>
+  <rect x="42" y="30" width="516" height="126" rx="22" fill="#9a3412"/>
+  <rect x="62" y="66" width="248" height="18" rx="9" fill="#ffffff"/>
+  <rect x="62" y="98" width="210" height="10" rx="5" fill="#fed7aa"/>
+  <rect x="62" y="184" width="476" height="12" rx="6" fill="#9a3412"/>
+  <rect x="62" y="214" width="476" height="10" rx="5" fill="#d7def2"/>
+  <rect x="62" y="238" width="436" height="10" rx="5" fill="#e8edf9"/>
+  <rect x="62" y="286" width="476" height="12" rx="6" fill="#9a3412"/>
+  <rect x="62" y="316" width="476" height="10" rx="5" fill="#d7def2"/>
+  <rect x="62" y="340" width="456" height="10" rx="5" fill="#e8edf9"/>
+  <rect x="62" y="388" width="476" height="12" rx="6" fill="#9a3412"/>
+  <rect x="62" y="418" width="476" height="10" rx="5" fill="#d7def2"/>
+  <rect x="62" y="442" width="420" height="10" rx="5" fill="#e8edf9"/>
+  <rect x="62" y="500" width="160" height="38" rx="19" fill="#fff1e6"/>
+  <rect x="234" y="500" width="160" height="38" rx="19" fill="#fff1e6"/>
+  <rect x="406" y="500" width="120" height="38" rx="19" fill="#fff1e6"/>
+  <text x="62" y="690" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#111827">Professional One Page</text>
+  <text x="62" y="726" font-family="Arial, sans-serif" font-size="18" fill="#667085">Compact ATS-friendly executive style</text>
+</svg>

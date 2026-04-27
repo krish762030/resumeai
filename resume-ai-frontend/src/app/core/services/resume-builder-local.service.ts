@@ -4,33 +4,18 @@ import { GeneratedResume, ResumeTemplate } from '../models/resume.model';
 @Injectable({ providedIn: 'root' })
 export class ResumeBuilderLocalService {
   private readonly templates: ResumeTemplate[] = [
-    {
-      id: 1,
-      name: 'Fresher Software Developer',
-      category: 'Software',
-      atsFriendly: true,
-      previewImageUrl: 'https://placehold.co/600x800/eef2ff/14121f?text=ATS+Developer',
-      htmlTemplatePath: 'local/fresher-software-developer',
-      premium: false
-    },
-    {
-      id: 2,
-      name: 'Internship Resume',
-      category: 'Internship',
-      atsFriendly: true,
-      previewImageUrl: 'https://placehold.co/600x800/f7f4ee/14121f?text=ATS+Internship',
-      htmlTemplatePath: 'local/internship-resume',
-      premium: false
-    },
-    {
-      id: 3,
-      name: 'General Graduate Resume',
-      category: 'Graduate',
-      atsFriendly: true,
-      previewImageUrl: 'https://placehold.co/600x800/ffffff/14121f?text=ATS+Graduate',
-      htmlTemplatePath: 'local/general-graduate-resume',
-      premium: false
-    }
+    this.template(1, 'ATS Graduate', 'Fresher', 'Software Developer', 'Fresher', 'Single Column', 'Clean', true, true, 'assets/templates/ats-graduate.svg', 'ats-graduate', 'styles/ats-graduate', '["summary","experience","skills","education","projects"]', '["modern","clean","one-column"]'),
+    this.template(2, 'ATS Internship', 'Fresher', 'Software Developer', 'Fresher', 'Single Column', 'Minimal', false, true, 'assets/templates/ats-internship.svg', 'ats-internship', 'styles/ats-internship', '["summary","experience","skills","education","projects"]', '["internship","ATS","student"]'),
+    this.template(3, 'Fresher Software Developer', 'Developer', 'Software Developer', 'Fresher', 'Single Column', 'Modern', false, true, 'assets/templates/fresher-software-developer.svg', 'fresher-software-developer', 'styles/fresher-software-developer', '["summary","experience","skills","education","projects","certifications"]', '["developer","simple","ATS"]'),
+    this.template(4, 'Java Developer', 'Developer', 'Software Developer', 'Mid Level', 'Single Column', 'Modern', true, true, 'assets/templates/java-developer.svg', 'java-developer', 'styles/java-developer', '["summary","experience","skills","education","projects","certifications"]', '["java","backend","clean"]'),
+    this.template(5, 'Backend Developer', 'Developer', 'Software Developer', 'Mid Level', 'Single Column', 'Minimal', true, true, 'assets/templates/backend-developer.svg', 'backend-developer', 'styles/backend-developer', '["summary","experience","skills","education","projects","certifications"]', '["api","microservices","ATS"]'),
+    this.template(6, 'Full Stack Developer', 'Developer', 'Software Developer', 'Mid Level', 'Two Column', 'Modern', true, true, 'assets/templates/fullstack-developer.svg', 'fullstack-developer', 'styles/fullstack-developer', '["summary","experience","skills","education","projects","certifications"]', '["modern","two-column","full-stack"]'),
+    this.template(7, 'Data Analyst', 'Developer', 'Data Analyst', 'Mid Level', 'Single Column', 'Clean', true, true, 'assets/templates/data-analyst.svg', 'data-analyst', 'styles/data-analyst', '["summary","experience","skills","education","projects","certifications"]', '["analytics","sql","dashboard"]'),
+    this.template(8, 'MBA Fresher', 'Professional', 'MBA', 'Fresher', 'Single Column', 'Clean', true, true, 'assets/templates/mba-fresher.svg', 'mba-fresher', 'styles/mba-fresher', '["summary","experience","skills","education","projects"]', '["mba","business","clean"]'),
+    this.template(9, 'Professional One Page', 'Professional', 'MBA', 'Mid Level', 'Single Column', 'Compact', false, true, 'assets/templates/professional-one-page.svg', 'professional-one-page', 'styles/professional-one-page', '["summary","experience","skills","education","projects"]', '["compact","one-page","executive"]'),
+    this.template(10, 'Two Column Modern', 'Modern', 'Software Developer', 'Mid Level', 'Two Column', 'Modern', true, true, 'assets/templates/two-column-modern.svg', 'two-column-modern', 'styles/two-column-modern', '["summary","experience","skills","education","projects","certifications"]', '["two-column","modern","visual"]'),
+    this.template(11, 'Compact Resume', 'Compact', 'Software Developer', 'Mid Level', 'Single Column', 'Compact', true, true, 'assets/templates/compact-resume.svg', 'compact-resume', 'styles/compact-resume', '["summary","experience","skills","education","projects"]', '["compact","one-page","ATS"]'),
+    this.template(12, 'Creative Clean', 'Modern', 'Designer', 'Mid Level', 'Two Column', 'Creative', true, true, 'assets/templates/creative-clean.svg', 'creative-clean', 'styles/creative-clean', '["summary","experience","skills","education","projects"]', '["creative","clean","portfolio"]')
   ];
 
   private readonly storageKey = 'resume_ai_guest_resumes';
@@ -146,7 +131,7 @@ export class ResumeBuilderLocalService {
       editCount,
       downloadCount,
       planType: 'GUEST',
-      premiumTemplate: false,
+      premiumTemplate: template.premium,
       canEdit: true,
       watermarkEnabled: false,
       createdAt,
@@ -259,5 +244,41 @@ export class ResumeBuilderLocalService {
 
   private escape(value: string): string {
     return value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  private template(
+    id: number,
+    name: string,
+    category: string,
+    roleType: string,
+    experienceLevel: string,
+    layoutType: string,
+    styleType: string,
+    premium: boolean,
+    atsFriendly: boolean,
+    previewImageUrl: string,
+    templateKey: string,
+    cssTemplatePath: string,
+    supportedSectionsJson: string,
+    tagsJson: string
+  ): ResumeTemplate {
+    return {
+      id,
+      name,
+      category,
+      roleType,
+      experienceLevel,
+      layoutType,
+      styleType,
+      atsFriendly,
+      tagsJson,
+      previewImageUrl,
+      templateKey,
+      htmlTemplatePath: `local/${templateKey}`,
+      cssTemplatePath,
+      supportedSectionsJson,
+      premium,
+      htmlTemplateContent: undefined
+    };
   }
 }

@@ -20,7 +20,24 @@ import { UploadResumeComponent } from './features/resume/upload-resume/upload-re
 import { ResumeEditorComponent } from './features/resume-builder/resume-editor/resume-editor.component';
 import { ResumeFormComponent } from './features/resume-builder/resume-form/resume-form.component';
 import { ResumePreviewComponent } from './features/resume-builder/resume-preview/resume-preview.component';
+import { RecommendedTemplatesComponent } from './features/resume-builder/recommended-templates/recommended-templates.component';
+import { TemplateCardComponent } from './features/resume-builder/template-card/template-card.component';
+import { TemplateCustomizeBeforeUseComponent } from './features/resume-builder/template-customize-before-use/template-customize-before-use.component';
+import { TemplateFilterSidebarComponent } from './features/resume-builder/template-filter-sidebar/template-filter-sidebar.component';
+import { TemplateGridComponent } from './features/resume-builder/template-grid/template-grid.component';
+import { TemplateDashboardComponent } from './features/resume-builder/template-dashboard/template-dashboard.component';
 import { TemplateListComponent } from './features/resume-builder/template-list/template-list.component';
+import { TemplatePreviewModalComponent } from './features/resume-builder/template-preview-modal/template-preview-modal.component';
+import { TemplatePreviewPageComponent } from './features/resume-builder/template-preview-page/template-preview-page.component';
+import { TemplateSearchComponent } from './features/resume-builder/template-search/template-search.component';
+import { AddSectionModalComponent } from './features/resume-editor/add-section-modal/add-section-modal.component';
+import { AiToolsPanelComponent } from './features/resume-editor/ai-tools-panel/ai-tools-panel.component';
+import { CustomizePanelComponent } from './features/resume-editor/customize-panel/customize-panel.component';
+import { EditorTopbarComponent } from './features/resume-editor/editor-topbar/editor-topbar.component';
+import { ResumeEditorShellComponent } from './features/resume-editor/resume-editor-shell/resume-editor-shell.component';
+import { ResumeEditorPreviewComponent } from './features/resume-editor/resume-preview/resume-preview.component';
+import { SectionAccordionComponent } from './features/resume-editor/section-accordion/section-accordion.component';
+import { SectionSidebarComponent } from './features/resume-editor/section-sidebar/section-sidebar.component';
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 import { LoaderComponent } from './shared/components/loader/loader.component';
@@ -50,10 +67,27 @@ import { JoinListPipe } from './shared/pipes/join-list.pipe';
     JobListComponent,
     JobMatchesComponent,
     PricingComponent,
+    TemplateDashboardComponent,
     TemplateListComponent,
+    TemplateGridComponent,
+    TemplateCardComponent,
+    TemplateCustomizeBeforeUseComponent,
+    TemplateFilterSidebarComponent,
+    TemplatePreviewModalComponent,
+    RecommendedTemplatesComponent,
+    TemplateSearchComponent,
+    TemplatePreviewPageComponent,
     ResumeFormComponent,
     ResumePreviewComponent,
-    ResumeEditorComponent
+    ResumeEditorComponent,
+    ResumeEditorShellComponent,
+    EditorTopbarComponent,
+    SectionSidebarComponent,
+    AddSectionModalComponent,
+    SectionAccordionComponent,
+    CustomizePanelComponent,
+    AiToolsPanelComponent,
+    ResumeEditorPreviewComponent
   ],
   imports: [
     BrowserModule,

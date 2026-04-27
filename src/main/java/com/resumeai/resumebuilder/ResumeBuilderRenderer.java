@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 public class ResumeBuilderRenderer {
@@ -99,6 +100,92 @@ public class ResumeBuilderRenderer {
         );
     }
 
+    public String renderDynamic(
+            String title,
+            String themeJson,
+            List<ResumeSection> sections,
+            boolean watermarkEnabled,
+            String templateHtmlContent
+    ) {
+        Map<String, Object> theme = readJson(themeJson);
+        String headerColor = stringValue(theme.get("headerColor"), "#284b8f");
+        String primaryColor = stringValue(theme.get("primaryColor"), "#1E3A5F");
+        String fontFamily = stringValue(theme.get("fontFamily"), "Poppins, Arial, sans-serif");
+        String sectionStyle = stringValue(theme.get("sectionStyle"), "underline");
+        String layout = stringValue(theme.get("layout"), "single-column");
+        String headerFontSize = numericValue(theme.get("headerFontSize"), 22);
+        String bodyFontSize = numericValue(theme.get("bodyFontSize"), 12);
+
+        String fullName = "Candidate Name";
+        String headline = "Professional Headline";
+        String email = "";
+        String phone = "";
+        String links = "";
+
+        for (ResumeSection section : sections) {
+            if (!section.isVisible()) {
+                continue;
+            }
+            Map<String, Object> content = readJson(section.getContentJson());
+            if ("SUMMARY".equalsIgnoreCase(section.getSectionType())) {
+                fullName = stringValue(content.get("fullName"), fullName);
+                headline = stringValue(content.get("headline"), stringValue(content.get("text"), headline));
+                email = stringValue(content.get("email"), email);
+                phone = stringValue(content.get("phone"), phone);
+                links = stringValue(content.get("links"), links);
+            }
+        }
+
+        String sectionsHtml = sections.stream()
+                .filter(ResumeSection::isVisible)
+                .sorted((left, right) -> Integer.compare(left.getSectionOrder(), right.getSectionOrder()))
+                .map(section -> renderDynamicSection(
+                        section.getSectionType(),
+                        section.getSectionTitle(),
+                        readJson(section.getContentJson()),
+                        primaryColor,
+                        sectionStyle
+                ))
+                .collect(Collectors.joining());
+
+        String watermark = watermarkEnabled
+                ? "<div style='margin-top:24px;padding-top:16px;border-top:1px dashed #ef4444;color:#ef4444;font-weight:700'>Free PDF includes watermark. Upgrade for premium templates, AI tools, and watermark-free export.</div>"
+                : "";
+
+        return """
+                <html>
+                  <body style="margin:0;background:#eef2ff;font-family:%s;color:#111827">
+                    <div style="max-width:900px;margin:24px auto;background:#ffffff;border:1px solid #e5e7eb;border-radius:20px;overflow:hidden">
+                      <div style="background:%s;color:#ffffff;padding:28px 32px">
+                        <h1 style="margin:0;font-size:%spx">%s</h1>
+                        <p style="margin:8px 0 0 0;font-size:15px;color:#dbeafe">%s</p>
+                        <p style="margin:12px 0 0 0;font-size:13px;color:#e5efff">%s | %s | %s</p>
+                      </div>
+                      <div style="padding:30px 32px;font-size:%spx">
+                        <div style="%s">%s</div>
+                        <div style="margin-top:20px;color:#6b7280;font-size:12px">Template: %s</div>
+                        %s
+                      </div>
+                    </div>
+                  </body>
+                </html>
+                """.formatted(
+                escape(fontFamily),
+                escape(headerColor),
+                escape(headerFontSize),
+                escape(fullName),
+                escape(headline),
+                escape(email),
+                escape(phone),
+                escape(links),
+                escape(bodyFontSize),
+                "two-column".equalsIgnoreCase(layout) ? "column-count:2;column-gap:28px;" : "",
+                sectionsHtml,
+                escape(title),
+                watermark
+        );
+    }
+
     private Map<String, Object> readJson(String json) {
         try {
             return objectMapper.readValue(json, new TypeReference<>() {
@@ -139,6 +226,17 @@ public class ResumeBuilderRenderer {
         return text.isEmpty() ? fallback : text;
     }
 
+    private String numericValue(Object value, int fallback) {
+        if (value instanceof Number number) {
+            return String.valueOf(number.intValue());
+        }
+        if (value == null) {
+            return String.valueOf(fallback);
+        }
+        String text = String.valueOf(value).trim();
+        return text.isEmpty() ? String.valueOf(fallback) : text;
+    }
+
     private String section(String title, List<String> items) {
         if (items.isEmpty()) {
             return "";
@@ -159,5 +257,72 @@ public class ResumeBuilderRenderer {
                 .replace("&", "&amp;")
                 .replace("<", "&lt;")
                 .replace(">", "&gt;");
+    }
+
+    private String renderDynamicSection(String sectionType, String sectionTitle, Map<String, Object> content, String accentColor, String sectionStyle) {
+        String headingStyle = switch (sectionStyle.toLowerCase()) {
+            case "pill" -> "display:inline-block;background:%s;color:white;padding:6px 14px;border-radius:999px;margin:0 0 12px 0;font-size:13px;text-transform:uppercase;letter-spacing:0.08em".formatted(escape(accentColor));
+            case "plain" -> "margin:0 0 12px 0;font-size:16px;color:%s;text-transform:uppercase;letter-spacing:0.08em".formatted(escape(accentColor));
+            default -> "margin:0 0 12px 0;font-size:16px;color:%s;text-transform:uppercase;letter-spacing:0.08em;border-bottom:2px solid %s;padding-bottom:6px".formatted(escape(accentColor), escape(accentColor));
+        };
+
+        String body = switch (sectionType.toUpperCase()) {
+            case "SUMMARY" -> "<p style='margin:0;line-height:1.8;color:#374151'>" + escape(stringValue(content.get("text"), "")) + "</p>";
+            case "EXPERIENCE" -> renderObjectItems(content.get("items"), List.of("company", "role", "location", "startDate", "endDate"), "description");
+            case "EDUCATION" -> renderObjectItems(content.get("items"), List.of("degree", "institute", "location", "startDate", "endDate"), null);
+            case "SKILLS" -> renderSkillGroups(content.get("groups"));
+            case "PROJECTS" -> renderObjectItems(content.get("items"), List.of("title", "subtitle"), "description");
+            case "CERTIFICATIONS" -> renderObjectItems(content.get("items"), List.of("title", "issuer", "year"), null);
+            case "LANGUAGES" -> renderObjectItems(content.get("items"), List.of("name", "level"), null);
+            default -> renderObjectItems(content.get("items"), List.of("title"), "description");
+        };
+        if (body.isBlank()) {
+            return "";
+        }
+        return "<section style='break-inside:avoid;margin-bottom:20px'><h2 style=\"" + headingStyle + "\">" + escape(sectionTitle) + "</h2>" + body + "</section>";
+    }
+
+    private String renderSkillGroups(Object groupsValue) {
+        if (!(groupsValue instanceof List<?> groups)) {
+            return "";
+        }
+        return groups.stream()
+                .filter(Map.class::isInstance)
+                .map(Map.class::cast)
+                .map(group -> {
+                    String title = stringValue(group.get("title"), "");
+                    List<String> skills = listValue(group.get("skills"));
+                    if (skills.isEmpty()) {
+                        return "";
+                    }
+                    return "<div style='margin-bottom:12px'><strong>" + escape(title) + ":</strong> " + escape(String.join(", ", skills)) + "</div>";
+                })
+                .collect(Collectors.joining());
+    }
+
+    private String renderObjectItems(Object itemsValue, List<String> primaryFields, String bulletField) {
+        if (!(itemsValue instanceof List<?> items)) {
+            return "";
+        }
+        return items.stream()
+                .filter(Map.class::isInstance)
+                .map(Map.class::cast)
+                .map(item -> {
+                    String header = primaryFields.stream()
+                            .map(field -> stringValue(item.get(field), ""))
+                            .filter(text -> !text.isBlank())
+                            .collect(Collectors.joining(" | "));
+                    String bullets = "";
+                    if (bulletField != null && item.get(bulletField) != null) {
+                        List<String> descriptions = listValue(item.get(bulletField));
+                        if (!descriptions.isEmpty()) {
+                            bullets = "<ul style='margin:8px 0 0 18px;padding:0;line-height:1.7'>" + descriptions.stream()
+                                    .map(line -> "<li>" + escape(line) + "</li>")
+                                    .collect(Collectors.joining()) + "</ul>";
+                        }
+                    }
+                    return "<div style='margin-bottom:14px'><div style='font-weight:600;color:#111827'>" + escape(header) + "</div>" + bullets + "</div>";
+                })
+                .collect(Collectors.joining());
     }
 }

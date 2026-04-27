@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Locale;
 
 @Service
 @RequiredArgsConstructor
@@ -17,8 +18,28 @@ public class ResumeTemplateService {
     private final ResumeTemplateRepository templateRepository;
     private final TemplateAssetStorageService templateAssetStorageService;
 
-    public List<ResumeTemplateResponse> getTemplates() {
+    public List<ResumeTemplateResponse> getTemplates(
+            String search,
+            String roleType,
+            String experience,
+            String layout,
+            String style,
+            Boolean isAtsFriendly,
+            Boolean isPremium,
+            String category
+    ) {
         return templateRepository.findAll().stream()
+                .filter(template -> matches(search, template.getName())
+                        || matches(search, template.getCategory())
+                        || matches(search, template.getRoleType())
+                        || matches(search, template.getTagsJson()))
+                .filter(template -> matchesExact(roleType, template.getRoleType()))
+                .filter(template -> matchesExact(experience, template.getExperienceLevel()))
+                .filter(template -> matchesExact(layout, template.getLayoutType()))
+                .filter(template -> matchesExact(style, template.getStyleType()))
+                .filter(template -> matchesExact(category, template.getCategory()))
+                .filter(template -> isAtsFriendly == null || template.isAtsFriendly() == isAtsFriendly)
+                .filter(template -> isPremium == null || template.isPremium() == isPremium)
                 .sorted((left, right) -> right.getCreatedAt().compareTo(left.getCreatedAt()))
                 .map(ResumeTemplateResponse::from)
                 .toList();
@@ -56,10 +77,18 @@ public class ResumeTemplateService {
         ResumeTemplate saved = templateRepository.save(ResumeTemplate.builder()
                 .name(request.name().trim())
                 .category(request.category().trim())
+                .roleType(normalizedOrFallback(request.roleType(), normalizeRoleType(request.category())))
+                .experienceLevel(normalizedOrFallback(request.experienceLevel(), "Fresher"))
+                .layoutType(normalizedOrFallback(request.layoutType(), "Single Column"))
+                .styleType(normalizedOrFallback(request.styleType(), "Modern"))
                 .atsFriendly(Boolean.TRUE.equals(request.atsFriendly()))
+                .tagsJson(normalizedOrFallback(request.tagsJson(), "[\"clean\",\"ATS\",\"simple\"]"))
                 .previewImageUrl(previewImageUrl)
+                .templateKey(normalizedOrFallback(request.templateKey(), slug(request.name())))
                 .htmlTemplatePath(htmlTemplatePath)
+                .cssTemplatePath(normalizedOrFallback(request.cssTemplatePath(), "styles/default"))
                 .htmlTemplateContent(htmlTemplateContent)
+                .supportedSectionsJson(normalizedOrFallback(request.supportedSectionsJson(), "[\"summary\",\"experience\",\"skills\",\"education\"]"))
                 .premium(Boolean.TRUE.equals(request.premium()))
                 .build());
 
@@ -88,5 +117,41 @@ public class ResumeTemplateService {
                   </body>
                 </html>
                 """;
+    }
+
+    private String normalizeRoleType(String category) {
+        String normalized = category == null ? "" : category.trim().toLowerCase(Locale.ROOT);
+        return switch (normalized) {
+            case "software", "developer" -> "developer";
+            case "design", "designer" -> "designer";
+            case "mba", "professional", "corporate" -> "mba";
+            default -> "developer";
+        };
+    }
+
+    private String slug(String value) {
+        return value == null ? "template" : value.trim().toLowerCase(Locale.ROOT).replaceAll("[^a-z0-9]+", "-").replaceAll("(^-|-$)", "");
+    }
+
+    private String normalizedOrFallback(String value, String fallback) {
+        return value == null || value.isBlank() ? fallback : value.trim();
+    }
+
+    private boolean matches(String query, String value) {
+        if (query == null || query.isBlank()) {
+            return true;
+        }
+        return value != null && value.toLowerCase(Locale.ROOT).contains(query.trim().toLowerCase(Locale.ROOT));
+    }
+
+    private boolean matchesExact(String query, String value) {
+        if (query == null || query.isBlank()) {
+            return true;
+        }
+        return value != null && normalize(value).equals(normalize(query));
+    }
+
+    private String normalize(String value) {
+        return value == null ? "" : value.trim().toLowerCase(Locale.ROOT).replace("-", "").replace(" ", "");
     }
 }

@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="840" viewBox="0 0 600 840">
+  <rect width="600" height="840" rx="28" fill="#eef2ff"/>
+  <rect x="42" y="30" width="516" height="780" rx="22" fill="#ffffff"/>
+  <rect x="42" y="30" width="516" height="126" rx="22" fill="#284b8f"/>
+  <circle cx="108" cy="94" r="36" fill="#dbeafe"/>
+  <rect x="162" y="72" width="220" height="16" rx="8" fill="#ffffff"/>
+  <rect x="162" y="102" width="184" height="10" rx="5" fill="#dbeafe"/>
+  <rect x="62" y="192" width="136" height="12" rx="6" fill="#284b8f"/>
+  <rect x="62" y="222" width="466" height="10" rx="5" fill="#d7def2"/>
+  <rect x="62" y="246" width="442" height="10" rx="5" fill="#e8edf9"/>
+  <rect x="62" y="294" width="136" height="12" rx="6" fill="#284b8f"/>
+  <rect x="62" y="324" width="466" height="10" rx="5" fill="#d7def2"/>
+  <rect x="62" y="348" width="404" height="10" rx="5" fill="#e8edf9"/>
+  <rect x="62" y="396" width="136" height="12" rx="6" fill="#284b8f"/>
+  <rect x="62" y="426" width="466" height="10" rx="5" fill="#d7def2"/>
+  <rect x="62" y="450" width="420" height="10" rx="5" fill="#e8edf9"/>
+  <rect x="62" y="510" width="154" height="38" rx="19" fill="#edf2ff"/>
+  <rect x="228" y="510" width="146" height="38" rx="19" fill="#edf2ff"/>
+  <rect x="386" y="510" width="118" height="38" rx="19" fill="#edf2ff"/>
+  <text x="62" y="690" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#111827">General Graduate</text>
+  <text x="62" y="726" font-family="Arial, sans-serif" font-size="18" fill="#667085">Fresher resume · One column</text>
+</svg>

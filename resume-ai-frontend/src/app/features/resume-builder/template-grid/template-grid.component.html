@@ -1,0 +1,10 @@
+<div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+  <app-template-card
+    *ngFor="let template of templates"
+    [template]="template"
+    [favorite]="favoriteIds.has(template.id)"
+    (preview)="preview.emit($event)"
+    (useTemplate)="useTemplate.emit($event)"
+    (toggleFavorite)="toggleFavorite.emit($event)">
+  </app-template-card>
+</div>
