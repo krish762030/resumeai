@@ -1,0 +1,26 @@
+<div *ngIf="builderWorkspace; else standardLayout" class="app-shell px-3 py-3 md:px-4">
+  <div class="mx-auto max-w-[1600px]">
+    <router-outlet></router-outlet>
+  </div>
+</div>
+
+<ng-template #standardLayout>
+  <div *ngIf="publicLanding; else appLayout" class="app-shell">
+    <router-outlet></router-outlet>
+  </div>
+
+  <ng-template #appLayout>
+  <div class="app-shell px-4 py-4 md:px-6">
+    <div class="mx-auto grid min-h-[calc(100vh-2rem)] max-w-[1440px] gap-5 lg:grid-cols-[272px_1fr]">
+      <app-sidebar></app-sidebar>
+
+      <main class="space-y-4">
+        <app-navbar></app-navbar>
+        <section class="shell-card min-h-[calc(100vh-8.5rem)] p-4 md:p-6">
+          <router-outlet></router-outlet>
+        </section>
+      </main>
+    </div>
+  </div>
+  </ng-template>
+</ng-template>

@@ -1,0 +1,15 @@
+<header class="shell-card flex items-center justify-between px-5 py-4">
+  <div>
+    <p class="eyebrow">Candidate Dashboard</p>
+    <h1 class="section-title text-2xl text-ink">Sharper resumes. Faster applications.</h1>
+  </div>
+
+  <div class="flex items-center gap-3">
+    <div class="hidden items-center gap-2 rounded-2xl border border-[#e4e7f6] bg-[#f8f9ff] px-4 py-2.5 text-sm font-semibold text-ink md:flex" *ngIf="user$ | async as user">
+      <span class="flex h-8 w-8 items-center justify-center rounded-xl bg-[#5b5cf0] text-xs font-bold text-white">{{ user.name.charAt(0) }}</span>
+      {{ user.name }}
+    </div>
+    <a *ngIf="!(user$ | async)" routerLink="/auth/login" class="btn-secondary px-4 py-2 text-sm">Login</a>
+    <button *ngIf="user$ | async" class="btn-secondary px-4 py-2 text-sm" (click)="logout()">Logout</button>
+  </div>
+</header>
