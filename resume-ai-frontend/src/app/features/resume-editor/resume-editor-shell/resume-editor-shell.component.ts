@@ -52,6 +52,10 @@ export class ResumeEditorShellComponent implements OnInit {
   ngOnInit(): void {
     const resumeId = Number(this.route.snapshot.paramMap.get('resumeId'));
     const templateId = Number(this.route.snapshot.paramMap.get('templateId'));
+    const tabParam = this.route.snapshot.paramMap.get('tab');
+    if (tabParam === 'overview' || tabParam === 'content' || tabParam === 'customize' || tabParam === 'ai') {
+      this.state = { ...this.state, activeTab: tabParam };
+    }
 
     this.resumeService.getTemplates().subscribe({
       next: (templates) => this.templates = templates,
@@ -83,6 +87,9 @@ export class ResumeEditorShellComponent implements OnInit {
 
   onActiveTabChange(tab: 'overview' | 'content' | 'customize' | 'ai'): void {
     this.state = { ...this.state, activeTab: tab };
+    if (this.resume) {
+      void this.router.navigate(['/resume-editor', this.resume.id, tab]);
+    }
   }
 
   openTemplateSwitcher(): void {
@@ -237,7 +244,7 @@ export class ResumeEditorShellComponent implements OnInit {
           templateId,
           title: `${template.name} Resume`
         }).subscribe({
-          next: (resume) => this.router.navigate(['/resume-builder/edit', resume.id]),
+          next: (resume) => this.router.navigate(['/resume-editor', resume.id, 'content']),
           error: (error) => this.handleError(error, 'Failed to create editor resume.')
         });
       },

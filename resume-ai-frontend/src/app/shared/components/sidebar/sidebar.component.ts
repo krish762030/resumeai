@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
@@ -9,12 +10,23 @@ export class SidebarComponent {
   readonly user$ = this.authService.currentUser$;
 
   readonly links = [
-    { label: 'Dashboard', route: '/dashboard' },
-    { label: 'My Resumes', route: '/resume/upload' },
-    { label: 'Resume Builder', route: '/resume-builder/templates' },
-    { label: 'Pricing', route: '/pricing' }
+    { label: 'My Resumes', route: '/resumes' },
+    { label: 'Resume Templates', route: '/templates' },
+    { label: 'Cover Letters', route: '/resumes' },
+    { label: 'ATS Score', route: '/ats-score' },
+    { label: 'AI Tools', route: '/resumes' },
+    { label: 'Plans & Pricing', route: '/pricing' },
+    { label: 'My Account', route: '/resumes' }
   ];
 
-  constructor(private readonly authService: AuthService) {
+  constructor(
+    private readonly authService: AuthService,
+    private readonly router: Router
+  ) {
+  }
+
+  logout(): void {
+    this.authService.logout();
+    void this.router.navigate(['/auth/login']);
   }
 }

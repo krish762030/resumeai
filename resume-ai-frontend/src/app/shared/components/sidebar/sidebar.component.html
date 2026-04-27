@@ -3,12 +3,8 @@
     <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[#5b5cf0] to-[#7c4dff] text-sm font-extrabold">R</div>
     <div>
       <p class="text-sm font-bold">ResumeAI</p>
-      <p class="text-xs text-white/55">Career cockpit</p>
+      <p class="text-xs text-white/55">Resume workspace</p>
     </div>
-  </div>
-
-  <div class="mb-5">
-    <p class="text-xs font-semibold uppercase tracking-[0.3em] text-white/40">Workspace</p>
   </div>
 
   <nav class="space-y-2.5">
@@ -29,20 +25,7 @@
     >
       Manage Templates
     </a>
-
-    <a
-      *ngIf="(user$ | async)?.role === 'ADMIN'"
-      routerLink="/admin/templates/upload"
-      routerLinkActive="bg-white/12 text-white"
-      class="block rounded-2xl px-4 py-3 font-semibold text-white/65 transition hover:bg-white/8 hover:text-white"
-    >
-      Upload Template
-    </a>
   </nav>
 
-  <div class="mt-8 rounded-[24px] bg-white/6 p-4">
-    <p class="text-sm font-semibold text-white">Upgrade insight</p>
-    <p class="mt-2 text-sm leading-6 text-white/60">Unlock premium templates, watermark-free downloads, and more edits from the pricing workspace.</p>
-    <a routerLink="/pricing" class="mt-4 inline-flex rounded-2xl bg-white px-4 py-2 text-sm font-semibold text-[#17172b]">View plans</a>
-  </div>
+  <button class="mt-8 w-full rounded-2xl border border-white/20 px-4 py-3 text-left font-semibold text-white/80 transition hover:bg-white/10" type="button" (click)="logout()">Logout</button>
 </aside>
