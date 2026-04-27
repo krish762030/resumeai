@@ -13,6 +13,8 @@ export class MyResumesComponent implements OnInit {
   loading = true;
   error = '';
   showUpgradeModal = false;
+  showStartModal = false;
+  importing = false;
   activeMenuResumeId: number | null = null;
 
   resumes: ResumeEditorResume[] = [];
@@ -53,7 +55,33 @@ export class MyResumesComponent implements OnInit {
       this.showUpgradeModal = true;
       return;
     }
+    this.showStartModal = true;
+  }
+
+  startFromTemplate(): void {
+    this.showStartModal = false;
     void this.router.navigate(['/templates']);
+  }
+
+  onImportResume(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) {
+      return;
+    }
+    this.importing = true;
+    this.resumeService.importResume(file).subscribe({
+      next: ({ resumeId }) => {
+        this.importing = false;
+        this.showStartModal = false;
+        void this.router.navigate(['/resume-editor', resumeId, 'content']);
+      },
+      error: (error) => {
+        this.importing = false;
+        this.error = error?.error?.message ?? 'Unable to import resume.';
+      }
+    });
+    input.value = '';
   }
 
   onDuplicate(resume: ResumeEditorResume): void {
@@ -102,9 +130,21 @@ export class MyResumesComponent implements OnInit {
     });
   }
 
+  downloadResume(resume: ResumeEditorResume): void {
+    const blob = new Blob([resume.generatedHtml], { type: 'text/html;charset=utf-8' });
+    const objectUrl = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = objectUrl;
+    anchor.download = `${resume.title.replace(/[^a-z0-9]+/gi, '-').toLowerCase() || 'resume'}.html`;
+    anchor.click();
+    URL.revokeObjectURL(objectUrl);
+    this.activeMenuResumeId = null;
+  }
+
   openResume(resumeId: number, tab: 'overview' | 'content' | 'customize' | 'ai' = 'content'): void {
     this.activeMenuResumeId = null;
-    void this.router.navigate(['/resume-editor', resumeId, tab]);
+    const mappedTab = tab === 'ai' ? 'ai-tools' : tab;
+    void this.router.navigate(['/resume-editor', resumeId, mappedTab]);
   }
 
   goToPlans(): void {

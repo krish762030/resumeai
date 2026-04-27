@@ -53,8 +53,8 @@ export class ResumeEditorShellComponent implements OnInit {
     const resumeId = Number(this.route.snapshot.paramMap.get('resumeId'));
     const templateId = Number(this.route.snapshot.paramMap.get('templateId'));
     const tabParam = this.route.snapshot.paramMap.get('tab');
-    if (tabParam === 'overview' || tabParam === 'content' || tabParam === 'customize' || tabParam === 'ai') {
-      this.state = { ...this.state, activeTab: tabParam };
+    if (tabParam === 'overview' || tabParam === 'content' || tabParam === 'customize' || tabParam === 'ai' || tabParam === 'ai-tools') {
+      this.state = { ...this.state, activeTab: tabParam === 'ai-tools' ? 'ai' : tabParam };
     }
 
     this.resumeService.getTemplates().subscribe({
@@ -88,7 +88,8 @@ export class ResumeEditorShellComponent implements OnInit {
   onActiveTabChange(tab: 'overview' | 'content' | 'customize' | 'ai'): void {
     this.state = { ...this.state, activeTab: tab };
     if (this.resume) {
-      void this.router.navigate(['/resume-editor', this.resume.id, tab]);
+      const routeTab = tab === 'ai' ? 'ai-tools' : tab;
+      void this.router.navigate(['/resume-editor', this.resume.id, routeTab]);
     }
   }
 
@@ -242,7 +243,7 @@ export class ResumeEditorShellComponent implements OnInit {
       next: (template) => {
         this.resumeService.createEditorResume({
           templateId,
-          title: `${template.name} Resume`
+          title: 'Untitled Resume'
         }).subscribe({
           next: (resume) => this.router.navigate(['/resume-editor', resume.id, 'content']),
           error: (error) => this.handleError(error, 'Failed to create editor resume.')

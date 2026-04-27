@@ -207,6 +207,16 @@ export class ResumeService {
     return this.http.post<ResumeEditorResume>(`${this.editorBaseUrl}/${resumeId}/preview`, {});
   }
 
+
+
+  importResume(file: File, templateId?: number): Observable<{ resumeId: number }> {
+    const formData = new FormData();
+    formData.append('file', file);
+    if (templateId) {
+      formData.append('templateId', String(templateId));
+    }
+    return this.http.post<{ resumeId: number }>(`${this.apiUrl}/resumes/import`, formData);
+  }
   getSectionTemplates(): Observable<ResumeSectionTemplate[]> {
     return this.http.get<ResumeSectionTemplate[]>(`${this.apiUrl}/section-templates`);
   }

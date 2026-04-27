@@ -13,7 +13,7 @@ import { TemplateFilterState } from '../template-filter-sidebar/template-filter-
 })
 export class TemplateDashboardComponent implements OnInit {
   readonly favoriteStorageKey = 'resume_ai_template_favorites';
-  readonly categoryChips = ['All', 'Developer', 'Fresher', 'Professional', 'Modern', 'Compact'];
+  readonly categoryChips = ['All Templates', 'Simple', 'Modern', 'Creative', 'Developer', 'Fresher', 'Professional', 'Compact'];
 
   templates: ResumeTemplate[] = [];
   loading = true;
@@ -21,6 +21,9 @@ export class TemplateDashboardComponent implements OnInit {
   sort = 'recommended';
   favoriteIds = new Set<number>();
   usageLimit: UsageLimit | null = null;
+  selectedTemplate: ResumeTemplate | null = null;
+  showUpgradeModal = false;
+  importing = false;
   filters: TemplateFilterState = {
     roleType: '',
     experience: '',
@@ -98,13 +101,6 @@ export class TemplateDashboardComponent implements OnInit {
     return this.sortTemplates(filtered);
   }
 
-  get recommendedTemplates(): ResumeTemplate[] {
-    const priority = ['Java Developer', 'Backend Developer', 'Full Stack Developer'];
-    return priority
-      .map((name) => this.templates.find((template) => template.name === name))
-      .filter((template): template is ResumeTemplate => !!template);
-  }
-
   onFiltersChange(filters: TemplateFilterState): void {
     this.filters = filters;
   }
@@ -116,30 +112,42 @@ export class TemplateDashboardComponent implements OnInit {
   applyCategory(category: string): void {
     this.filters = {
       ...this.filters,
-      category: category === 'All' ? '' : category
+      category: category === 'All Templates' ? '' : category
     };
   }
 
   onPreview(template: ResumeTemplate): void {
-    void this.router.navigate(['/templates', template.id, 'preview']);
+    this.selectedTemplate = template;
   }
 
   onUseTemplate(template: ResumeTemplate): void {
-    if (!this.authService.isAuthenticated()) {
-      void this.router.navigate(['/login'], {
-        queryParams: { returnUrl: `/resume-builder/create/${template.id}` }
-      });
-      return;
-    }
-
     if (template.premium && !this.usageLimit?.premium) {
-      void this.router.navigate(['/pricing'], {
-        queryParams: { templateId: template.id, source: 'templates' }
-      });
+      this.showUpgradeModal = true;
       return;
     }
 
-    void this.router.navigate(['/resume-builder/create', template.id]);
+    this.resumeService.createEditorResume({ templateId: template.id, title: 'Untitled Resume' }).subscribe({
+      next: (resume) => void this.router.navigate(['/resume-editor', resume.id, 'content'])
+    });
+  }
+
+  onImportResume(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) {
+      return;
+    }
+    this.importing = true;
+    this.resumeService.importResume(file).subscribe({
+      next: ({ resumeId }) => {
+        this.importing = false;
+        void this.router.navigate(['/resume-editor', resumeId, 'content']);
+      },
+      error: () => {
+        this.importing = false;
+      }
+    });
+    input.value = '';
   }
 
   toggleFavorite(template: ResumeTemplate): void {
@@ -165,28 +173,8 @@ export class TemplateDashboardComponent implements OnInit {
       case 'ats-first':
         return sorted.sort((left, right) => Number(right.atsFriendly) - Number(left.atsFriendly));
       default:
-        return sorted.sort((left, right) => this.recommendationScore(right) - this.recommendationScore(left));
+        return sorted;
     }
-  }
-
-  private recommendationScore(template: ResumeTemplate): number {
-    let score = 0;
-    if (template.atsFriendly) {
-      score += 20;
-    }
-    if (template.roleType === 'Software Developer') {
-      score += 15;
-    }
-    if (template.experienceLevel === 'Mid Level') {
-      score += 10;
-    }
-    if (this.recommendedTemplates.some((recommended) => recommended.id === template.id)) {
-      score += 100;
-    }
-    if (!template.premium) {
-      score += 5;
-    }
-    return score;
   }
 
   private readFavorites(): Set<number> {

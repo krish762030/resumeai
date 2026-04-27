@@ -7,6 +7,7 @@ public record ResumeEditorCreateRequest(
         @NotNull(message = "Template is required")
         Long templateId,
         @NotBlank(message = "Title is required")
-        String title
+        String title,
+        String source
 ) {
 }

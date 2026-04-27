@@ -14,6 +14,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ResumeEditorController {
 
+    public record ImportResumeResponse(Long resumeId) {}
+
     private final ResumeEditorService resumeEditorService;
 
     @GetMapping("/api/resume-builder/editor/resumes")
@@ -24,6 +26,12 @@ public class ResumeEditorController {
     @PostMapping("/api/resume-builder/editor/resumes")
     @ResponseStatus(HttpStatus.CREATED)
     public ResumeEditorResponse createResume(@Valid @RequestBody ResumeEditorCreateRequest request) {
+        return resumeEditorService.createResume(request);
+    }
+
+    @PostMapping("/api/resumes")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResumeEditorResponse createResumeAlias(@Valid @RequestBody ResumeEditorCreateRequest request) {
         return resumeEditorService.createResume(request);
     }
 
@@ -85,6 +93,17 @@ public class ResumeEditorController {
         return resumeEditorService.reorderSections(resumeId, request);
     }
 
+
+
+    @PostMapping(value = "/api/resumes/import", consumes = {"multipart/form-data"})
+    @ResponseStatus(HttpStatus.CREATED)
+    public ImportResumeResponse importResume(
+            @RequestPart("file") MultipartFile file,
+            @RequestPart(value = "templateId", required = false) Long templateId
+    ) {
+        return new ImportResumeResponse(resumeEditorService.importResume(file, templateId));
+    }
+
     @PostMapping("/api/resumes/{resumeId}/duplicate")
     @ResponseStatus(HttpStatus.CREATED)
     public ResumeEditorResponse duplicateResume(@PathVariable Long resumeId) {
@@ -124,6 +143,15 @@ public class ResumeEditorController {
         return resumeEditorService.reorderSections(resumeId, request);
     }
 
+    @PatchMapping("/api/resumes/{resumeId}/sections/{sectionId}/visibility")
+    public ResumeEditorResponse updateSectionVisibilityAlias(
+            @PathVariable Long resumeId,
+            @PathVariable Long sectionId,
+            @Valid @RequestBody ResumeSectionVisibilityRequest request
+    ) {
+        return resumeEditorService.updateSectionVisibility(resumeId, sectionId, request);
+    }
+
     @PatchMapping("/api/resume-builder/editor/resumes/{resumeId}/sections/{sectionId}/visibility")
     public ResumeEditorResponse updateSectionVisibility(
             @PathVariable Long resumeId,
@@ -133,9 +161,22 @@ public class ResumeEditorController {
         return resumeEditorService.updateSectionVisibility(resumeId, sectionId, request);
     }
 
+    @GetMapping("/api/resumes/{resumeId}/theme")
+    public Map<String, String> getThemeAlias(@PathVariable Long resumeId) {
+        return Map.of("themeJson", resumeEditorService.getTheme(resumeId));
+    }
+
     @GetMapping("/api/resume-builder/editor/resumes/{resumeId}/theme")
     public Map<String, String> getTheme(@PathVariable Long resumeId) {
         return Map.of("themeJson", resumeEditorService.getTheme(resumeId));
+    }
+
+    @PutMapping("/api/resumes/{resumeId}/theme")
+    public ResumeEditorResponse updateThemeAlias(
+            @PathVariable Long resumeId,
+            @Valid @RequestBody ResumeThemeUpdateRequest request
+    ) {
+        return resumeEditorService.updateTheme(resumeId, request);
     }
 
     @PutMapping("/api/resume-builder/editor/resumes/{resumeId}/theme")
