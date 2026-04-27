@@ -56,6 +56,7 @@ export class ResumeFormComponent implements OnInit {
         this.loading = false;
       },
       error: () => {
+        this.error = 'Template could not be loaded.';
         this.loading = false;
       }
     });

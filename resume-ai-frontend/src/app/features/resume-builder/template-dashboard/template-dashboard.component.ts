@@ -126,9 +126,7 @@ export class TemplateDashboardComponent implements OnInit {
       return;
     }
 
-    this.resumeService.createEditorResume({ templateId: template.id, title: 'Untitled Resume' }).subscribe({
-      next: (resume) => void this.router.navigate(['/resume-editor', resume.id, 'content'])
-    });
+    void this.router.navigate(['/resume-builder/create', template.id]);
   }
 
   onImportResume(event: Event): void {

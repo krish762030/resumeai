@@ -13,6 +13,7 @@ import { ResumeService } from '../../../core/services/resume.service';
 export class TemplatePreviewPageComponent implements OnInit {
   readonly favoriteStorageKey = 'resume_ai_template_favorites';
   loading = true;
+  error = '';
   template: ResumeTemplate | null = null;
   usageLimit: UsageLimit | null = null;
   favoriteIds = new Set<number>();
@@ -43,6 +44,7 @@ export class TemplatePreviewPageComponent implements OnInit {
         this.loading = false;
       },
       error: () => {
+        this.error = 'Template preview could not be loaded.';
         this.loading = false;
       }
     });
@@ -61,13 +63,6 @@ export class TemplatePreviewPageComponent implements OnInit {
 
   onUseTemplate(): void {
     if (!this.template) {
-      return;
-    }
-
-    if (!this.authService.isAuthenticated()) {
-      void this.router.navigate(['/login'], {
-        queryParams: { returnUrl: `/resume-builder/create/${this.template.id}` }
-      });
       return;
     }
 

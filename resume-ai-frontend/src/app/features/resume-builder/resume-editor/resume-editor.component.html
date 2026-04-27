@@ -158,3 +158,8 @@
     </section>
   </form>
 </div>
+
+<div *ngIf="!loading && (!resume || !template)" class="shell-card p-8">
+  <p class="text-sm font-medium text-[#ef4444]">{{ error || 'Resume draft could not be opened.' }}</p>
+  <a routerLink="/templates" class="btn-secondary mt-4 inline-flex">Back to templates</a>
+</div>

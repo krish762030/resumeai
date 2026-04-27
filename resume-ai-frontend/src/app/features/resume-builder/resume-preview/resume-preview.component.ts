@@ -11,6 +11,7 @@ import { ResumeBuilderLocalService } from '../../../core/services/resume-builder
 export class ResumePreviewComponent implements OnInit {
   resume: GeneratedResume | null = null;
   loading = true;
+  error = '';
   downloadMessage = '';
 
   constructor(
@@ -24,6 +25,9 @@ export class ResumePreviewComponent implements OnInit {
   ngOnInit(): void {
     const resumeId = Number(this.route.snapshot.paramMap.get('resumeId'));
     this.resume = this.resumeBuilderLocalService.getResume(resumeId);
+    if (!this.resume) {
+      this.error = 'Saved draft not found.';
+    }
     this.loading = false;
 
     if (this.resume && this.authService.isAuthenticated() && this.route.snapshot.queryParamMap.get('download') === '1') {

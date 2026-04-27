@@ -53,6 +53,7 @@ export class ResumeEditorComponent implements OnInit {
     const resumeId = Number(this.route.snapshot.paramMap.get('resumeId'));
     this.resume = this.resumeBuilderLocalService.getResume(resumeId);
     if (!this.resume) {
+      this.error = 'Saved draft not found.';
       this.loading = false;
       return;
     }
@@ -63,6 +64,7 @@ export class ResumeEditorComponent implements OnInit {
         this.loading = false;
       },
       error: () => {
+        this.error = 'Template could not be loaded for this draft.';
         this.loading = false;
       }
     });

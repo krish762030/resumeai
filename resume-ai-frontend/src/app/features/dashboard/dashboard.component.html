@@ -13,7 +13,9 @@
         </div>
 
         <nav class="hidden items-center gap-10 text-sm font-semibold text-[#6f76a3] lg:flex">
-          <a *ngFor="let item of landingNavItems" href="#" class="transition hover:text-[#17172b]">{{ item }}</a>
+          <a *ngFor="let item of landingNavItems" [routerLink]="item.route" [fragment]="item.fragment" class="transition hover:text-[#17172b]">
+            {{ item.label }}
+          </a>
         </nav>
 
         <div class="flex items-center gap-3">
@@ -159,7 +161,7 @@
       </div>
     </section>
 
-    <section class="py-4">
+    <section id="about" class="py-4">
       <div class="mb-6 flex flex-wrap items-end justify-between gap-4">
         <div>
           <p class="eyebrow">Recommended Templates</p>
@@ -269,7 +271,7 @@
               <div class="flex flex-wrap gap-2">
                 <a [routerLink]="editorRoute(item.id)" class="btn-secondary px-3 py-2 text-xs">Edit</a>
                 <a [routerLink]="changeTemplateRoute(item.id)" class="btn-secondary px-3 py-2 text-xs">Change Template</a>
-                <a [routerLink]="['/resume-builder/preview', item.id]" class="btn-primary px-3 py-2 text-xs">Download</a>
+                <a [routerLink]="editorRoute(item.id)" class="btn-primary px-3 py-2 text-xs">Open</a>
               </div>
             </div>
           </div>

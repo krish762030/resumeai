@@ -51,3 +51,8 @@
     </div>
   </div>
 </div>
+
+<div *ngIf="!loading && !resume" class="shell-card p-8">
+  <p class="text-sm font-medium text-[#ef4444]">{{ error || 'Resume preview is not available.' }}</p>
+  <a routerLink="/templates" class="btn-secondary mt-4 inline-flex">Back to templates</a>
+</div>

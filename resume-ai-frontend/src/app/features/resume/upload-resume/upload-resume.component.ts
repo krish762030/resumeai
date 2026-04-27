@@ -44,7 +44,8 @@ export class UploadResumeComponent {
 
         if (event.type === HttpEventType.Response) {
           const resume = event.body as ResumeResponse;
-          this.router.navigate(['/resume', resume.id, 'analysis']);
+          this.uploading = false;
+          void this.router.navigate(['/resume', resume.id, 'analysis']);
         }
       },
       error: (error: { error?: { message?: string } }) => {

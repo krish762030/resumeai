@@ -17,6 +17,11 @@ import { ResumeService } from '../../core/services/resume.service';
 })
 export class DashboardComponent implements OnInit {
   readonly dashboardTemplateNames = ['ATS Internship', 'Fresher Software Developer', 'Professional One Page'];
+  readonly landingNavItems = [
+    { label: 'Resume Templates', route: ['/templates'] },
+    { label: 'Pricing', route: ['/pricing'] },
+    { label: 'About', route: ['/'], fragment: 'about' }
+  ];
   loading = true;
   guestMode = false;
   user: User | null = null;
@@ -27,8 +32,6 @@ export class DashboardComponent implements OnInit {
   latestAnalysis: ResumeAnalysis | null = null;
   latestMatches: JobMatch[] = [];
   usageLimit: UsageLimit | null = null;
-  readonly landingNavItems = ['Resume Templates', 'Pricing', 'About'];
-
   constructor(
     private readonly authService: AuthService,
     private readonly resumeService: ResumeService,
@@ -78,7 +81,7 @@ export class DashboardComponent implements OnInit {
     if (this.latestResume) {
       return ['/resume', String(this.latestResume.id), 'analysis'];
     }
-    return ['/resume/upload'];
+    return ['/resume', 'upload'];
   }
 
   get dashboardScore(): number {
@@ -114,7 +117,7 @@ export class DashboardComponent implements OnInit {
   }
 
   editorRoute(resumeId: number): string[] {
-    return ['/resume-builder/edit', String(resumeId)];
+    return ['/resume-editor', String(resumeId), 'content'];
   }
 
   changeTemplateRoute(resumeId: number): string[] {
