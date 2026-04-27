@@ -36,6 +36,14 @@ public class ResumeEditorController {
         return resumeEditorService.updateResume(resumeId, request);
     }
 
+    @PutMapping("/api/resumes/{resumeId}/template")
+    public ResumeEditorResponse switchTemplate(
+            @PathVariable Long resumeId,
+            @Valid @RequestBody ResumeTemplateSwitchRequest request
+    ) {
+        return resumeEditorService.switchTemplate(resumeId, request);
+    }
+
     @DeleteMapping("/api/resume-builder/editor/resumes/{resumeId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteResume(@PathVariable Long resumeId) {

@@ -12,9 +12,7 @@
   </div>
 
   <div class="flex flex-wrap items-center gap-3">
-    <select class="field min-w-[220px]" [ngModel]="resume?.templateId" (ngModelChange)="templateChange.emit($event)">
-      <option *ngFor="let template of templates" [ngValue]="template.id">{{ template.name }}</option>
-    </select>
+    <button class="btn-secondary" type="button" (click)="openTemplateSwitcher.emit()">Change Template</button>
     <button class="btn-primary" type="button" (click)="download.emit()">Download</button>
   </div>
 </div>
