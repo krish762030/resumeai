@@ -8,16 +8,21 @@ import com.resumeai.common.exception.ResourceNotFoundException;
 import com.resumeai.resumebuilder.dto.*;
 import com.resumeai.subscription.PlanType;
 import com.resumeai.subscription.SubscriptionService;
+import com.resumeai.resume.PdfResumeParser;
 import com.resumeai.template.ResumeTemplate;
 import com.resumeai.template.ResumeTemplateService;
 import com.resumeai.template.ResumeTemplateRepository;
 import com.resumeai.user.User;
 import com.resumeai.user.UserService;
 import lombok.RequiredArgsConstructor;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashSet;
@@ -52,6 +57,7 @@ public class ResumeEditorService {
     private final UserService userService;
     private final SubscriptionService subscriptionService;
     private final TemplateChangeHistoryRepository templateChangeHistoryRepository;
+    private final PdfResumeParser pdfResumeParser;
     private final ObjectMapper objectMapper;
 
     public List<ResumeEditorResponse> getMyResumes() {
@@ -128,6 +134,55 @@ public class ResumeEditorService {
         return toResponse(resume, planType, premium);
     }
 
+
+
+
+    @Transactional
+    public Long importResume(MultipartFile file, Long templateId) {
+        if (file == null || file.isEmpty()) {
+            throw new BadRequestException("Resume file is required.");
+        }
+
+        User user = userService.getCurrentUser();
+        PlanType planType = subscriptionService.resolvePlan(user);
+        boolean premium = isPremium(planType);
+
+        if (!premium && userGeneratedResumeRepository.countByUser(user) >= 1) {
+            throw new BadRequestException("Free plan supports only 1 created resume. Upgrade for more.");
+        }
+
+        ResumeTemplate template = templateId != null
+                ? validateTemplateAccess(templateId, premium)
+                : resumeTemplateRepository.findByNameIgnoreCase("ATS Internship")
+                .orElseThrow(() -> new ResourceNotFoundException("Default template not found."));
+
+        String extractedText = extractResumeText(file);
+
+        UserGeneratedResume resume = userGeneratedResumeRepository.save(UserGeneratedResume.builder()
+                .user(user)
+                .template(template)
+                .title("Imported Resume")
+                .themeJson(compactJson(DEFAULT_THEME_JSON))
+                .status(ResumeEditorStatus.DRAFT)
+                .resumeDataJson("{}")
+                .generatedHtml("")
+                .generatedPdfUrl(null)
+                .editCount(0)
+                .downloadCount(0)
+                .build());
+
+        seedDefaultSections(resume, premium);
+
+        List<ResumeSection> sections = resumeSectionRepository.findByResumeOrderBySectionOrderAsc(resume);
+        sections.stream()
+                .filter(section -> "SUMMARY".equalsIgnoreCase(section.getSectionType()))
+                .findFirst()
+                .ifPresent(section -> section.setContentJson(compactJson(String.format("{\"text\":\"%s\"}", escapeJson(extractedText.length() > 700 ? extractedText.substring(0, 700) : extractedText)))));
+        resumeSectionRepository.saveAll(sections);
+
+        refreshRenderedState(resume, premium);
+        return resume.getId();
+    }
 
     @Transactional
     public ResumeEditorResponse duplicateResume(Long resumeId) {
@@ -387,7 +442,7 @@ public class ResumeEditorService {
     }
 
     private String escapeJson(String value) {
-        return value.replace("\\", "\\\\").replace(""", "\\"").replace("\n", " ").replace("\r", " ").trim();
+        return value.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", " ").replace("\r", " ").trim();
     }
 
     private void refreshRenderedState(UserGeneratedResume resume, boolean premium) {
@@ -448,6 +503,29 @@ public class ResumeEditorService {
         } catch (Exception exception) {
             throw new BadRequestException("Invalid JSON content supplied.");
         }
+    }
+
+
+
+    private String extractResumeText(MultipartFile file) {
+        String name = file.getOriginalFilename() == null ? "" : file.getOriginalFilename().toLowerCase(Locale.ROOT);
+        try {
+            if (name.endsWith(".pdf") || "application/pdf".equalsIgnoreCase(file.getContentType())) {
+                File tempFile = Files.createTempFile("resume-upload", ".pdf").toFile();
+                file.transferTo(tempFile);
+                String text = pdfResumeParser.extractText(tempFile);
+                tempFile.delete();
+                return text;
+            }
+            if (name.endsWith(".docx") || "application/vnd.openxmlformats-officedocument.wordprocessingml.document".equalsIgnoreCase(file.getContentType())) {
+                try (XWPFDocument document = new XWPFDocument(new ByteArrayInputStream(file.getBytes()))) {
+                    return document.getParagraphs().stream().map(p -> p.getText() == null ? "" : p.getText()).collect(java.util.stream.Collectors.joining(" "));
+                }
+            }
+        } catch (Exception exception) {
+            throw new BadRequestException("Failed to parse uploaded resume.");
+        }
+        throw new BadRequestException("Only PDF and DOCX files are supported.");
     }
 
     private boolean isPremium(PlanType planType) {

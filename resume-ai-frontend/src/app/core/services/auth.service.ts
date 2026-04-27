@@ -35,7 +35,9 @@ export class AuthService {
   }
 
   logout(): void {
-    localStorage.clear();
+    localStorage.removeItem(this.tokenKey);
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
     sessionStorage.clear();
     this.currentUserSubject.next(null);
   }
@@ -49,7 +51,7 @@ export class AuthService {
   }
 
   createLoginRedirectUrl(state: RouterStateSnapshot): string {
-    return `/auth/login?returnUrl=${encodeURIComponent(state.url || '/resumes')}`;
+    return `/login?returnUrl=${encodeURIComponent(state.url || '/resumes')}`;
   }
 
   hydrateUser(): void {

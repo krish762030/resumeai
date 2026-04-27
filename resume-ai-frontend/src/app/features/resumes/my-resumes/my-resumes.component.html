@@ -21,7 +21,7 @@
     <article class="flex min-h-[320px] cursor-pointer flex-col items-center justify-center rounded-3xl border-2 border-dashed border-[#c8c5ff] bg-[#faf9ff] text-center" (click)="onCreateResume()">
       <div class="mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-[#f0edff] text-4xl text-[#5b5cf0]">+</div>
       <h3 class="text-2xl font-extrabold text-[#17172b]">New Resume</h3>
-      <p class="mt-2 text-sm text-[#667085]">Create a new resume from templates</p>
+      <p class="mt-2 text-sm text-[#667085]">Create from templates or import existing resume</p>
     </article>
 
     <article *ngFor="let resume of resumes" class="group relative overflow-hidden rounded-3xl border border-[#e5e7eb] bg-white p-4">
@@ -43,7 +43,7 @@
         <button class="menu-item" type="button" (click)="onDuplicate(resume)">Duplicate</button>
         <button class="menu-item" type="button" (click)="openResume(resume.id, 'customize')">Change Template</button>
         <button class="menu-item" type="button" (click)="openResume(resume.id, 'overview')">View Resume</button>
-        <button class="menu-item" type="button" (click)="openResume(resume.id, 'content')">Download PDF</button>
+        <button class="menu-item" type="button" (click)="downloadResume(resume)">Download PDF</button>
         <button class="menu-item text-[#dc2626]" type="button" (click)="onDelete(resume)">Delete</button>
       </div>
 
@@ -53,7 +53,7 @@
           <button class="rounded-xl bg-white px-3 py-2 text-sm font-semibold text-[#17172b]" (click)="openResume(resume.id, 'content')">Edit Resume</button>
           <button class="rounded-xl bg-white px-3 py-2 text-sm font-semibold text-[#17172b]" (click)="onDuplicate(resume)">Duplicate</button>
           <button class="rounded-xl bg-white px-3 py-2 text-sm font-semibold text-[#17172b]" (click)="openResume(resume.id, 'customize')">Change Template</button>
-          <button class="rounded-xl bg-white px-3 py-2 text-sm font-semibold text-[#17172b]" (click)="openResume(resume.id, 'content')">Download</button>
+          <button class="rounded-xl bg-white px-3 py-2 text-sm font-semibold text-[#17172b]" (click)="downloadResume(resume)">Download PDF</button>
           <button class="rounded-xl bg-[#ef4444] px-3 py-2 text-sm font-semibold text-white" (click)="onDelete(resume)">Delete</button>
         </div>
       </div>
@@ -69,6 +69,22 @@
     <div class="mt-8 grid gap-3">
       <button class="btn-primary" type="button" (click)="goToPlans()">View Plans</button>
       <button class="btn-secondary" type="button" (click)="showUpgradeModal = false">Cancel</button>
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="showStartModal" class="fixed inset-0 z-50 flex items-center justify-center bg-[#0f172a]/60 p-4">
+  <div class="w-full max-w-xl rounded-3xl bg-white p-8">
+    <button class="ml-auto block text-2xl text-[#667085]" type="button" (click)="showStartModal = false">×</button>
+    <h3 class="mt-2 text-center text-3xl font-extrabold text-[#17172b]">Start building your resume</h3>
+    <p class="mx-auto mt-3 max-w-md text-center text-[#667085]">Choose how you want to begin.</p>
+    <div class="mt-8 grid gap-3">
+      <label class="btn-secondary cursor-pointer text-center">
+        <input type="file" class="hidden" accept=".pdf,.doc,.docx" (change)="onImportResume($event)">
+        {{ importing ? 'Importing...' : 'Import existing resume' }}
+      </label>
+      <button class="btn-primary" type="button" (click)="startFromTemplate()">Start from template</button>
     </div>
   </div>
 </div>

@@ -14,9 +14,9 @@ export class SidebarComponent {
     { label: 'Resume Templates', route: '/templates' },
     { label: 'Cover Letters', route: '/resumes' },
     { label: 'ATS Score', route: '/ats-score' },
-    { label: 'AI Tools', route: '/resumes' },
+    { label: 'AI Tools', route: '/ai-tools' },
     { label: 'Plans & Pricing', route: '/pricing' },
-    { label: 'My Account', route: '/resumes' }
+    { label: 'My Account', route: '/account' }
   ];
 
   constructor(
@@ -27,6 +27,6 @@ export class SidebarComponent {
 
   logout(): void {
     this.authService.logout();
-    void this.router.navigate(['/auth/login']);
+    void this.router.navigate(['/']);
   }
 }

@@ -45,7 +45,7 @@ export class RegisterComponent {
     this.authService.register({ name: name!, email: email!, password: password! })
       .pipe(finalize(() => (this.loading = false)))
       .subscribe({
-        next: () => this.router.navigateByUrl(this.route.snapshot.queryParamMap.get('returnUrl') || '/dashboard'),
+        next: () => this.router.navigateByUrl(this.route.snapshot.queryParamMap.get('returnUrl') || '/resumes'),
         error: (error: { error?: { message?: string } }) => {
           this.error = error.error?.message ?? 'Registration failed.';
         }

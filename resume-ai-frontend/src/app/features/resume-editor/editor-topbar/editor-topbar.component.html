@@ -10,7 +10,8 @@
     <select class="field min-w-[220px]" [ngModel]="resume?.id">
       <option [ngValue]="resume?.id">{{ resume?.title || 'Resume' }}</option>
     </select>
+    <button class="btn-secondary" type="button" (click)="openTemplateSwitcher.emit()">Change Template</button>
     <button class="btn-primary" type="button" (click)="download.emit()">Download</button>
-    <button class="btn-secondary" type="button" (click)="openTemplateSwitcher.emit()">More</button>
+    <button class="btn-secondary" type="button">More</button>
   </div>
 </div>
