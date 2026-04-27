@@ -1,9 +1,4 @@
 <div class="shell-card sticky top-3 z-20 flex flex-wrap items-center justify-between gap-4 px-4 py-3">
-  <div>
-    <p class="eyebrow">Resume Editor</p>
-    <h2 class="text-xl font-extrabold text-[#17172b]">{{ resume?.title || 'Resume' }}</h2>
-  </div>
-
   <div class="flex flex-wrap gap-3">
     <button type="button" class="rounded-2xl px-5 py-3 font-semibold transition" [ngClass]="activeTab === 'overview' ? 'bg-[#5b5cf0] text-white' : 'bg-white text-[#17172b] border border-[#dfe3f6]'" (click)="activeTabChange.emit('overview')">Overview</button>
     <button type="button" class="rounded-2xl px-5 py-3 font-semibold transition" [ngClass]="activeTab === 'content' ? 'bg-[#5b5cf0] text-white' : 'bg-white text-[#17172b] border border-[#dfe3f6]'" (click)="activeTabChange.emit('content')">Content</button>
@@ -12,7 +7,11 @@
   </div>
 
   <div class="flex flex-wrap items-center gap-3">
-    <button class="btn-secondary" type="button" (click)="openTemplateSwitcher.emit()">Change Template</button>
+    <select class="field min-w-[220px]" [ngModel]="resume?.id">
+      <option [ngValue]="resume?.id">{{ resume?.title || 'Resume' }}</option>
+    </select>
     <button class="btn-primary" type="button" (click)="download.emit()">Download</button>
+    <button class="btn-secondary" type="button" (click)="openTemplateSwitcher.emit()">Change Template</button>
+    <button class="btn-secondary" type="button">More</button>
   </div>
 </div>

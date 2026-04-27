@@ -65,7 +65,7 @@ export class TemplatePreviewPageComponent implements OnInit {
     }
 
     if (!this.authService.isAuthenticated()) {
-      void this.router.navigate(['/auth/login'], {
+      void this.router.navigate(['/login'], {
         queryParams: { returnUrl: `/resume-builder/create/${this.template.id}` }
       });
       return;

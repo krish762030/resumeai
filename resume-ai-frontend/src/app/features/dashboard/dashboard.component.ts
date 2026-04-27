@@ -103,7 +103,7 @@ export class DashboardComponent implements OnInit {
 
   logout(): void {
     this.authService.logout();
-    void this.router.navigate(['/auth/login']);
+    void this.router.navigate(['/']);
   }
 
   templateUseRoute(template: ResumeTemplate): string[] {

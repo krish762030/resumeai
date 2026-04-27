@@ -10,11 +10,13 @@ import com.resumeai.subscription.PlanType;
 import com.resumeai.subscription.SubscriptionService;
 import com.resumeai.template.ResumeTemplate;
 import com.resumeai.template.ResumeTemplateService;
+import com.resumeai.template.ResumeTemplateRepository;
 import com.resumeai.user.User;
 import com.resumeai.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -45,6 +47,7 @@ public class ResumeEditorService {
     private final ResumeSectionRepository resumeSectionRepository;
     private final SectionTemplateRepository sectionTemplateRepository;
     private final ResumeTemplateService resumeTemplateService;
+    private final ResumeTemplateRepository resumeTemplateRepository;
     private final ResumeBuilderRenderer resumeBuilderRenderer;
     private final UserService userService;
     private final SubscriptionService subscriptionService;
@@ -124,6 +127,103 @@ public class ResumeEditorService {
         refreshRenderedState(resume, premium);
         return toResponse(resume, planType, premium);
     }
+
+
+    @Transactional
+    public ResumeEditorResponse duplicateResume(Long resumeId) {
+        User user = userService.getCurrentUser();
+        UserGeneratedResume source = getOwnedResume(resumeId, user);
+        PlanType planType = subscriptionService.resolvePlan(user);
+        boolean premium = isPremium(planType);
+
+        if (!premium && userGeneratedResumeRepository.countByUser(user) >= 1) {
+            throw new BadRequestException("Free plan supports only 1 created resume. Upgrade for more.");
+        }
+
+        UserGeneratedResume copy = userGeneratedResumeRepository.save(UserGeneratedResume.builder()
+                .user(user)
+                .template(source.getTemplate())
+                .title(source.getTitle() + " Copy")
+                .themeJson(source.getThemeJson())
+                .status(ResumeEditorStatus.DRAFT)
+                .resumeDataJson(source.getResumeDataJson())
+                .generatedHtml(source.getGeneratedHtml())
+                .generatedPdfUrl(null)
+                .editCount(0)
+                .downloadCount(0)
+                .build());
+
+        List<ResumeSection> sourceSections = resumeSectionRepository.findByResumeOrderBySectionOrderAsc(source);
+        List<ResumeSection> copiedSections = new ArrayList<>();
+        for (ResumeSection sourceSection : sourceSections) {
+            copiedSections.add(ResumeSection.builder()
+                    .resume(copy)
+                    .sectionType(sourceSection.getSectionType())
+                    .sectionTitle(sourceSection.getSectionTitle())
+                    .sectionOrder(sourceSection.getSectionOrder())
+                    .visible(sourceSection.isVisible())
+                    .contentJson(sourceSection.getContentJson())
+                    .build());
+        }
+        resumeSectionRepository.saveAll(copiedSections);
+
+        refreshRenderedState(copy, premium);
+        return toResponse(copy, planType, premium);
+    }
+
+    @Transactional
+    public ResumeEditorResponse importResume(MultipartFile file, Long templateId) {
+        if (file == null || file.isEmpty()) {
+            throw new BadRequestException("Resume file is required");
+        }
+
+        User user = userService.getCurrentUser();
+        PlanType planType = subscriptionService.resolvePlan(user);
+        boolean premium = isPremium(planType);
+
+        if (!premium && userGeneratedResumeRepository.countByUser(user) >= 1) {
+            throw new BadRequestException("Free plan supports only 1 created resume. Upgrade for more.");
+        }
+
+        ResumeTemplate template = templateId == null
+                ? resumeTemplateRepository.findAll().stream().filter(item -> !item.isPremium()).findFirst()
+                    .orElseThrow(() -> new BadRequestException("No free template is configured"))
+                : validateTemplateAccess(templateId, premium);
+
+        String extractedText;
+        try {
+            extractedText = new String(file.getBytes());
+        } catch (Exception exception) {
+            throw new BadRequestException("Failed to read uploaded file");
+        }
+
+        UserGeneratedResume resume = userGeneratedResumeRepository.save(UserGeneratedResume.builder()
+                .user(user)
+                .template(template)
+                .title("Imported Resume")
+                .themeJson(compactJson(DEFAULT_THEME_JSON))
+                .status(ResumeEditorStatus.DRAFT)
+                .resumeDataJson("{}")
+                .generatedHtml("")
+                .generatedPdfUrl(null)
+                .editCount(0)
+                .downloadCount(0)
+                .build());
+
+        seedDefaultSections(resume, premium);
+        List<ResumeSection> sections = resumeSectionRepository.findByResumeOrderBySectionOrderAsc(resume);
+        sections.stream()
+                .filter(section -> "SUMMARY".equalsIgnoreCase(section.getSectionType()))
+                .findFirst()
+                .ifPresent(section -> {
+                    section.setContentJson(compactJson("{\"text\":\"" + escapeJson(extractedText.substring(0, Math.min(1200, extractedText.length()))) + "\"}"));
+                    resumeSectionRepository.save(section);
+                });
+
+        refreshRenderedState(resume, premium);
+        return toResponse(resume, planType, premium);
+    }
+
 
     @Transactional
     public void deleteResume(Long resumeId) {
@@ -338,6 +438,10 @@ public class ResumeEditorService {
                 !premium,
                 resolveUnsupportedSectionTitles(resume.getTemplate(), sections)
         );
+    }
+
+    private String escapeJson(String value) {
+        return value.replace("\\", "\\\\").replace(""", "\\"").replace("\n", " ").replace("\r", " ").trim();
     }
 
     private void refreshRenderedState(UserGeneratedResume resume, boolean premium) {

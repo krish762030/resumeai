@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -48,6 +49,58 @@ public class ResumeEditorController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteResume(@PathVariable Long resumeId) {
         resumeEditorService.deleteResume(resumeId);
+    }
+
+
+    @GetMapping("/api/resumes/{resumeId}/sections")
+    public List<ResumeSectionResponse> getSectionsAlias(@PathVariable Long resumeId) {
+        return resumeEditorService.getSections(resumeId);
+    }
+
+    @PostMapping("/api/resumes/{resumeId}/sections")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResumeEditorResponse addSectionAlias(@PathVariable Long resumeId, @Valid @RequestBody ResumeSectionRequest request) {
+        return resumeEditorService.addSection(resumeId, request);
+    }
+
+    @PutMapping("/api/resumes/{resumeId}/sections/{sectionId}")
+    public ResumeEditorResponse updateSectionAlias(
+            @PathVariable Long resumeId,
+            @PathVariable Long sectionId,
+            @Valid @RequestBody ResumeSectionRequest request
+    ) {
+        return resumeEditorService.updateSection(resumeId, sectionId, request);
+    }
+
+    @DeleteMapping("/api/resumes/{resumeId}/sections/{sectionId}")
+    public ResumeEditorResponse deleteSectionAlias(@PathVariable Long resumeId, @PathVariable Long sectionId) {
+        return resumeEditorService.deleteSection(resumeId, sectionId);
+    }
+
+    @PatchMapping("/api/resumes/{resumeId}/sections/reorder")
+    public ResumeEditorResponse reorderSectionsAlias(
+            @PathVariable Long resumeId,
+            @Valid @RequestBody ResumeSectionReorderRequest request
+    ) {
+        return resumeEditorService.reorderSections(resumeId, request);
+    }
+
+
+
+    @PostMapping("/api/resumes/import")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Map<String, Long> importResume(
+            @RequestPart("file") MultipartFile file,
+            @RequestParam(value = "templateId", required = false) Long templateId
+    ) {
+        ResumeEditorResponse imported = resumeEditorService.importResume(file, templateId);
+        return Map.of("resumeId", imported.id());
+    }
+
+    @PostMapping("/api/resumes/{resumeId}/duplicate")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResumeEditorResponse duplicateResume(@PathVariable Long resumeId) {
+        return resumeEditorService.duplicateResume(resumeId);
     }
 
     @GetMapping("/api/resume-builder/editor/resumes/{resumeId}/sections")

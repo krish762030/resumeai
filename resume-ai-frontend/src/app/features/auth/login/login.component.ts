@@ -37,7 +37,7 @@ export class LoginComponent {
     this.authService.login(this.form.getRawValue() as { email: string; password: string; })
       .pipe(finalize(() => (this.loading = false)))
       .subscribe({
-        next: () => this.router.navigateByUrl(this.route.snapshot.queryParamMap.get('returnUrl') || '/dashboard'),
+        next: () => this.router.navigateByUrl(this.route.snapshot.queryParamMap.get('returnUrl') || '/resumes'),
         error: (error: { error?: { message?: string } }) => {
           this.error = error.error?.message ?? 'Login failed. Check your credentials.';
         }

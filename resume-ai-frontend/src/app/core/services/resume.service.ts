@@ -171,6 +171,20 @@ export class ResumeService {
     return this.http.delete<void>(`${this.editorBaseUrl}/${resumeId}`);
   }
 
+  duplicateEditorResume(resumeId: number): Observable<ResumeEditorResume> {
+    return this.http.post<ResumeEditorResume>(`${this.apiUrl}/resumes/${resumeId}/duplicate`, {});
+  }
+
+
+  importEditorResume(file: File, templateId?: number): Observable<{ resumeId: number }> {
+    const formData = new FormData();
+    formData.append('file', file);
+    if (templateId) {
+      formData.append('templateId', String(templateId));
+    }
+    return this.http.post<{ resumeId: number }>(`${this.apiUrl}/resumes/import`, formData);
+  }
+
   addEditorSection(resumeId: number, payload: { sectionType: string; sectionTitle: string; isVisible: boolean; contentJson: string; }): Observable<ResumeEditorResume> {
     return this.http.post<ResumeEditorResume>(`${this.editorBaseUrl}/${resumeId}/sections`, payload);
   }
