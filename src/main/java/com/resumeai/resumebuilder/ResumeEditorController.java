@@ -85,18 +85,6 @@ public class ResumeEditorController {
         return resumeEditorService.reorderSections(resumeId, request);
     }
 
-
-
-    @PostMapping("/api/resumes/import")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Map<String, Long> importResume(
-            @RequestPart("file") MultipartFile file,
-            @RequestParam(value = "templateId", required = false) Long templateId
-    ) {
-        ResumeEditorResponse imported = resumeEditorService.importResume(file, templateId);
-        return Map.of("resumeId", imported.id());
-    }
-
     @PostMapping("/api/resumes/{resumeId}/duplicate")
     @ResponseStatus(HttpStatus.CREATED)
     public ResumeEditorResponse duplicateResume(@PathVariable Long resumeId) {

@@ -49,7 +49,7 @@ export class AuthService {
   }
 
   createLoginRedirectUrl(state: RouterStateSnapshot): string {
-    return `/login?returnUrl=${encodeURIComponent(state.url || '/resumes')}`;
+    return `/auth/login?returnUrl=${encodeURIComponent(state.url || '/resumes')}`;
   }
 
   hydrateUser(): void {

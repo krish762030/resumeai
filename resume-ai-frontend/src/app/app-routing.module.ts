@@ -35,13 +35,11 @@ const routes: Routes = [
     path: '',
     component: MainLayoutComponent,
     children: [
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: '', redirectTo: 'resumes', pathMatch: 'full' },
       { path: 'dashboard', component: DashboardComponent },
       { path: 'resumes', component: MyResumesComponent, canActivate: [AuthGuard] },
       { path: 'resume/upload', component: UploadResumeComponent, canActivate: [AuthGuard] },
       { path: 'ats-score', component: UploadResumeComponent, canActivate: [AuthGuard] },
-      { path: 'ai-tools', component: MyResumesComponent, canActivate: [AuthGuard] },
-      { path: 'account', component: MyResumesComponent, canActivate: [AuthGuard] },
       { path: 'resume/:id', component: ResumeDetailComponent, canActivate: [AuthGuard] },
       { path: 'resume/:id/analysis', component: ResumeAnalysisComponent, canActivate: [AuthGuard] },
       { path: 'resume/:id/jobs', component: JobMatchesComponent, canActivate: [AuthGuard] },
@@ -52,12 +50,13 @@ const routes: Routes = [
       { path: 'resume-builder/edit/:resumeId', component: ResumeEditorShellComponent, canActivate: [AuthGuard] },
       { path: 'resume-editor/:resumeId', component: ResumeEditorShellComponent, canActivate: [AuthGuard] },
       { path: 'resume-editor/:resumeId/:tab', component: ResumeEditorShellComponent, canActivate: [AuthGuard] },
+      { path: 'resume-editor/:resumeId/change-template', component: ResumeEditorShellComponent, canActivate: [AuthGuard] },
       { path: 'admin/templates', component: TemplateManageComponent, canActivate: [AuthGuard] },
       { path: 'admin/templates/upload', component: TemplateUploadComponent, canActivate: [AuthGuard] },
       { path: 'pricing', component: PricingComponent }
     ]
   },
-  { path: '**', redirectTo: 'dashboard' }
+  { path: '**', redirectTo: 'resumes' }
 ];
 
 @NgModule({

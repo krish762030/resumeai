@@ -12,11 +12,11 @@ export class SidebarComponent {
   readonly links = [
     { label: 'My Resumes', route: '/resumes' },
     { label: 'Resume Templates', route: '/templates' },
-    { label: 'Cover Letters', route: '/templates' },
+    { label: 'Cover Letters', route: '/resumes' },
     { label: 'ATS Score', route: '/ats-score' },
-    { label: 'AI Tools', route: '/ai-tools' },
+    { label: 'AI Tools', route: '/resumes' },
     { label: 'Plans & Pricing', route: '/pricing' },
-    { label: 'My Account', route: '/account' }
+    { label: 'My Account', route: '/resumes' }
   ];
 
   constructor(
@@ -27,6 +27,6 @@ export class SidebarComponent {
 
   logout(): void {
     this.authService.logout();
-    void this.router.navigate(['/']);
+    void this.router.navigate(['/auth/login']);
   }
 }

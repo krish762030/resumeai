@@ -172,60 +172,6 @@ public class ResumeEditorService {
     }
 
     @Transactional
-    public ResumeEditorResponse importResume(MultipartFile file, Long templateId) {
-        if (file == null || file.isEmpty()) {
-            throw new BadRequestException("Resume file is required");
-        }
-
-        User user = userService.getCurrentUser();
-        PlanType planType = subscriptionService.resolvePlan(user);
-        boolean premium = isPremium(planType);
-
-        if (!premium && userGeneratedResumeRepository.countByUser(user) >= 1) {
-            throw new BadRequestException("Free plan supports only 1 created resume. Upgrade for more.");
-        }
-
-        ResumeTemplate template = templateId == null
-                ? resumeTemplateRepository.findAll().stream().filter(item -> !item.isPremium()).findFirst()
-                    .orElseThrow(() -> new BadRequestException("No free template is configured"))
-                : validateTemplateAccess(templateId, premium);
-
-        String extractedText;
-        try {
-            extractedText = new String(file.getBytes());
-        } catch (Exception exception) {
-            throw new BadRequestException("Failed to read uploaded file");
-        }
-
-        UserGeneratedResume resume = userGeneratedResumeRepository.save(UserGeneratedResume.builder()
-                .user(user)
-                .template(template)
-                .title("Imported Resume")
-                .themeJson(compactJson(DEFAULT_THEME_JSON))
-                .status(ResumeEditorStatus.DRAFT)
-                .resumeDataJson("{}")
-                .generatedHtml("")
-                .generatedPdfUrl(null)
-                .editCount(0)
-                .downloadCount(0)
-                .build());
-
-        seedDefaultSections(resume, premium);
-        List<ResumeSection> sections = resumeSectionRepository.findByResumeOrderBySectionOrderAsc(resume);
-        sections.stream()
-                .filter(section -> "SUMMARY".equalsIgnoreCase(section.getSectionType()))
-                .findFirst()
-                .ifPresent(section -> {
-                    section.setContentJson(compactJson("{\"text\":\"" + escapeJson(extractedText.substring(0, Math.min(1200, extractedText.length()))) + "\"}"));
-                    resumeSectionRepository.save(section);
-                });
-
-        refreshRenderedState(resume, premium);
-        return toResponse(resume, planType, premium);
-    }
-
-
-    @Transactional
     public void deleteResume(Long resumeId) {
         User user = userService.getCurrentUser();
         UserGeneratedResume resume = getOwnedResume(resumeId, user);

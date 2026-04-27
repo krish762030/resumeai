@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { forkJoin, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -10,13 +10,9 @@ import { ResumeService } from '../../../core/services/resume.service';
   templateUrl: './my-resumes.component.html'
 })
 export class MyResumesComponent implements OnInit {
-  @ViewChild('importFileInput') importFileInput?: ElementRef<HTMLInputElement>;
-
   loading = true;
   error = '';
   showUpgradeModal = false;
-  showStartModal = false;
-  importing = false;
   activeMenuResumeId: number | null = null;
 
   resumes: ResumeEditorResume[] = [];
@@ -30,7 +26,22 @@ export class MyResumesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.reload();
+    forkJoin({
+      resumes: this.resumeService.getEditorResumes(),
+      usageLimit: this.resumeService.getUsageLimit().pipe(catchError(() => of(null))),
+      templates: this.resumeService.getTemplates().pipe(catchError(() => of([])))
+    }).subscribe({
+      next: ({ resumes, usageLimit, templates }) => {
+        this.resumes = resumes;
+        this.usageLimit = usageLimit;
+        this.templateMap = new Map(templates.map((template) => [template.id, template]));
+        this.loading = false;
+      },
+      error: () => {
+        this.error = 'Unable to load resumes right now.';
+        this.loading = false;
+      }
+    });
   }
 
   get isFreePlan(): boolean {
@@ -42,40 +53,7 @@ export class MyResumesComponent implements OnInit {
       this.showUpgradeModal = true;
       return;
     }
-    this.showStartModal = true;
-  }
-
-  startFromTemplate(): void {
-    this.showStartModal = false;
     void this.router.navigate(['/templates']);
-  }
-
-  importResumeClick(): void {
-    this.importFileInput?.nativeElement.click();
-  }
-
-  onImportFileSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    const file = input.files?.[0];
-    if (!file) {
-      return;
-    }
-
-    this.importing = true;
-    this.error = '';
-    this.resumeService.importEditorResume(file).subscribe({
-      next: (response) => {
-        this.showStartModal = false;
-        this.importing = false;
-        input.value = '';
-        void this.router.navigate(['/resume-editor', response.resumeId, 'content']);
-      },
-      error: (error) => {
-        this.importing = false;
-        this.error = error?.error?.message ?? 'Unable to import resume.';
-        input.value = '';
-      }
-    });
   }
 
   onDuplicate(resume: ResumeEditorResume): void {
@@ -140,24 +118,5 @@ export class MyResumesComponent implements OnInit {
 
   lastEdited(resume: ResumeEditorResume): string {
     return new Date(resume.updatedAt).toLocaleDateString();
-  }
-
-  private reload(): void {
-    forkJoin({
-      resumes: this.resumeService.getEditorResumes(),
-      usageLimit: this.resumeService.getUsageLimit().pipe(catchError(() => of(null))),
-      templates: this.resumeService.getTemplates().pipe(catchError(() => of([])))
-    }).subscribe({
-      next: ({ resumes, usageLimit, templates }) => {
-        this.resumes = resumes;
-        this.usageLimit = usageLimit;
-        this.templateMap = new Map(templates.map((template) => [template.id, template]));
-        this.loading = false;
-      },
-      error: () => {
-        this.error = 'Unable to load resumes right now.';
-        this.loading = false;
-      }
-    });
   }
 }
