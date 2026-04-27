@@ -163,6 +163,10 @@ export class ResumeService {
     return this.http.put<ResumeEditorResume>(`${this.editorBaseUrl}/${resumeId}`, payload);
   }
 
+  switchEditorTemplate(resumeId: number, templateId: number): Observable<ResumeEditorResume> {
+    return this.http.put<ResumeEditorResume>(`${this.apiUrl}/resumes/${resumeId}/template`, { templateId });
+  }
+
   deleteEditorResume(resumeId: number): Observable<void> {
     return this.http.delete<void>(`${this.editorBaseUrl}/${resumeId}`);
   }

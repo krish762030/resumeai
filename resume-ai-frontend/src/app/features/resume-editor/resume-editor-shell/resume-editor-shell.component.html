@@ -6,9 +6,26 @@
     [templates]="templates"
     [activeTab]="state.activeTab"
     (activeTabChange)="onActiveTabChange($event)"
-    (templateChange)="onTemplateChange($event)"
+    (openTemplateSwitcher)="openTemplateSwitcher()"
     (download)="onDownload()">
   </app-editor-topbar>
+
+  <section *ngIf="showTemplateSwitcher" class="shell-card p-5">
+    <p class="eyebrow">Change Template</p>
+    <h3 class="mt-2 text-2xl font-extrabold text-[#17172b]">Pick a different design</h3>
+    <p class="mt-2 text-sm text-[#667085]">Your content will remain safe. Only the design will change.</p>
+    <div class="mt-4 grid gap-3 md:grid-cols-2">
+      <label *ngFor="let template of templates" class="rounded-2xl border p-3" [ngClass]="pendingTemplateId === template.id ? 'border-[#5b5cf0] bg-[#eef2ff]' : 'border-[#e5e7eb] bg-white'">
+        <input type="radio" name="template-switch" class="mr-2" [checked]="pendingTemplateId === template.id" (change)="pendingTemplateId = template.id">
+        <span class="font-semibold text-[#17172b]">{{ template.name }}</span>
+        <span class="ml-2 text-xs text-[#667085]">{{ template.layoutType }} · {{ template.styleType }}</span>
+      </label>
+    </div>
+    <div class="mt-4 flex gap-3">
+      <button class="btn-secondary" type="button" (click)="cancelTemplateSwitch()">Cancel</button>
+      <button class="btn-primary" type="button" [disabled]="saving || !pendingTemplateId" (click)="applyTemplateSwitch()">Apply Template</button>
+    </div>
+  </section>
 
   <div class="grid gap-4 xl:grid-cols-[0.42fr_0.58fr]">
     <section class="space-y-4">
@@ -77,6 +94,10 @@
         [resume]="resume">
       </app-ai-tools-panel>
 
+      <p *ngIf="successMessage" class="rounded-2xl bg-[#ecfdf3] px-4 py-3 text-sm font-medium text-[#166534]">{{ successMessage }}</p>
+      <p *ngIf="resume.hiddenUnsupportedSectionCount > 0" class="rounded-2xl bg-[#fff7ed] px-4 py-3 text-sm font-medium text-[#9a3412]">
+        This template does not display {{ resume.hiddenUnsupportedSectionCount }} sections: {{ resume.hiddenUnsupportedSections.join(', ') }}. Your data is still saved.
+      </p>
       <p *ngIf="error" class="rounded-2xl bg-[#fff1f1] px-4 py-3 text-sm font-medium text-[#ef4444]">{{ error }}</p>
     </section>
 
