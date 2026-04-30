@@ -1,0 +1,43 @@
+<article class="resume-page resume-template-minimal">
+  <header class="resume-minimal-header">
+    <div>
+      <h1
+        [appContenteditableModel]="document.personal.fullName"
+        [appContenteditableEnabled]="editable"
+        (appContenteditableModelChange)="updatePersonal({ fullName: $event })">
+      </h1>
+      <p
+        class="resume-headline"
+        [appContenteditableModel]="document.personal.headline || ''"
+        [appContenteditableEnabled]="editable"
+        (appContenteditableModelChange)="updatePersonal({ headline: $event })">
+      </p>
+      <p
+        class="resume-summary"
+        [appContenteditableModel]="document.personal.summary"
+        [appContenteditableEnabled]="editable"
+        (appContenteditableModelChange)="updatePersonal({ summary: $event })">
+      </p>
+    </div>
+
+    <p class="resume-contact-line">
+      <span
+        [appContenteditableModel]="document.personal.email"
+        [appContenteditableEnabled]="editable"
+        (appContenteditableModelChange)="updatePersonal({ email: $event })">
+      </span>
+      <span
+        [appContenteditableModel]="document.personal.phone"
+        [appContenteditableEnabled]="editable"
+        (appContenteditableModelChange)="updatePersonal({ phone: $event })">
+      </span>
+    </p>
+  </header>
+
+  <app-resume-section-renderer
+    *ngFor="let section of visibleSections(document); trackBy: trackBySectionId"
+    [section]="section"
+    [editable]="editable"
+    (sectionChange)="updateSection($event)">
+  </app-resume-section-renderer>
+</article>

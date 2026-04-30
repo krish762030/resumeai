@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="840" viewBox="0 0 600 840">
+  <rect width="600" height="840" rx="28" fill="#f2f4ff"/>
+  <rect x="42" y="30" width="516" height="780" rx="22" fill="#ffffff"/>
+  <rect x="42" y="30" width="516" height="126" rx="22" fill="#4338ca"/>
+  <rect x="62" y="66" width="248" height="18" rx="9" fill="#ffffff"/>
+  <rect x="62" y="98" width="210" height="10" rx="5" fill="#ddd6fe"/>
+  <rect x="62" y="184" width="170" height="580" rx="18" fill="#f8f9ff"/>
+  <rect x="248" y="184" width="280" height="580" rx="18" fill="#ffffff"/>
+  <rect x="80" y="210" width="112" height="12" rx="6" fill="#4338ca"/>
+  <rect x="80" y="244" width="112" height="12" rx="6" fill="#4338ca"/>
+  <rect x="80" y="278" width="112" height="12" rx="6" fill="#4338ca"/>
+  <rect x="268" y="210" width="136" height="12" rx="6" fill="#4338ca"/>
+  <rect x="268" y="240" width="240" height="10" rx="5" fill="#d7def2"/>
+  <rect x="268" y="264" width="226" height="10" rx="5" fill="#e8edf9"/>
+  <rect x="268" y="316" width="136" height="12" rx="6" fill="#4338ca"/>
+  <rect x="268" y="346" width="240" height="10" rx="5" fill="#d7def2"/>
+  <rect x="268" y="370" width="226" height="10" rx="5" fill="#e8edf9"/>
+  <rect x="268" y="422" width="136" height="12" rx="6" fill="#4338ca"/>
+  <rect x="268" y="452" width="240" height="10" rx="5" fill="#d7def2"/>
+  <rect x="268" y="476" width="226" height="10" rx="5" fill="#e8edf9"/>
+  <text x="62" y="690" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#111827">Full Stack Developer</text>
+  <text x="62" y="726" font-family="Arial, sans-serif" font-size="18" fill="#667085">Two-column modern layout</text>
+</svg>

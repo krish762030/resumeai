@@ -1,0 +1,14 @@
+<div class="shell-card p-6">
+  <p class="eyebrow">{{ title }}</p>
+  <div class="mt-5 flex items-end justify-between">
+    <div>
+      <p class="section-title text-5xl" [ngClass]="tone">{{ score }}</p>
+      <p class="mt-2 text-sm text-[#667085]">Out of 100</p>
+    </div>
+    <div class="h-16 w-16 rounded-full border-8 border-[#e7e9f6]" [ngClass]="{
+      'border-t-[#16a34a]': score >= 80,
+      'border-t-[#f59e0b]': score >= 60 && score < 80,
+      'border-t-[#ef4444]': score < 60
+    }"></div>
+  </div>
+</div>

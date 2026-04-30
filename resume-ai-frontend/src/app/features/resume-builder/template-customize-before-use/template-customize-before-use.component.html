@@ -1,0 +1,31 @@
+<div *ngIf="template" class="shell-card p-6">
+  <p class="eyebrow">Customize Before Use</p>
+  <h3 class="mt-2 text-2xl font-extrabold text-[#17172b]">Pick a starting style before opening the editor.</h3>
+
+  <div class="mt-5 grid gap-4 md:grid-cols-2">
+    <label class="text-sm font-semibold text-[#475467]">Accent color
+      <input class="field mt-2" type="color" [(ngModel)]="selectedColor">
+    </label>
+    <label class="text-sm font-semibold text-[#475467]">Font family
+      <select class="field mt-2" [(ngModel)]="selectedFont">
+        <option>Poppins</option>
+        <option>Manrope</option>
+        <option>Mulish</option>
+        <option>Work Sans</option>
+      </select>
+    </label>
+  </div>
+
+  <div class="mt-5 rounded-[24px] bg-[#f8f9ff] p-4 text-sm text-[#667085]">
+    Final fine-grained customization still happens inside the resume editor. This step sets the initial direction only.
+  </div>
+
+  <div class="mt-5 rounded-[24px] border border-[#d7dcff] bg-white p-4 text-sm text-[#667085]">
+    <p class="font-semibold text-[#17172b]">{{ template.premium ? 'Premium template access' : 'Free template access' }}</p>
+    <p class="mt-2">{{ template.premium ? 'Free users can preview this template, but using it requires an upgrade.' : 'This template can be used immediately and then edited in the builder.' }}</p>
+  </div>
+
+  <button type="button" class="btn-primary mt-6 w-full text-center" (click)="useTemplate.emit()">
+    {{ canUseTemplate ? 'Use this template' : 'Upgrade to use this template' }}
+  </button>
+</div>

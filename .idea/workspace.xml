@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="95feb4c2-01f1-4f59-968b-f82a05affbfc" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/docs/resume-builder-architecture.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resume-ai-frontend/src/app/core/models/resume-document.model.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resume-ai-frontend/src/app/core/models/resume-document.utils.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resume-ai-frontend/src/app/core/services/pdf-export.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resume-ai-frontend/src/app/features/resume-builder/resume-section-renderer/resume-section-renderer.component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resume-ai-frontend/src/app/features/resume-builder/resume-section-renderer/resume-section-renderer.component.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resume-ai-frontend/src/app/features/resume-builder/resume-template-renderer/resume-template-renderer.component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resume-ai-frontend/src/app/features/resume-builder/resume-template-renderer/resume-template-renderer.component.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resume-ai-frontend/src/app/features/resume-builder/resume-template-renderer/resume-template-renderer.component.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resume-ai-frontend/src/app/features/resume-builder/templates/classic-resume-template/classic-resume-template.component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resume-ai-frontend/src/app/features/resume-builder/templates/classic-resume-template/classic-resume-template.component.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resume-ai-frontend/src/app/features/resume-builder/templates/classic-resume-template/classic-resume-template.component.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resume-ai-frontend/src/app/features/resume-builder/templates/minimal-resume-template/minimal-resume-template.component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resume-ai-frontend/src/app/features/resume-builder/templates/minimal-resume-template/minimal-resume-template.component.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resume-ai-frontend/src/app/features/resume-builder/templates/minimal-resume-template/minimal-resume-template.component.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resume-ai-frontend/src/app/features/resume-builder/templates/modern-resume-template/modern-resume-template.component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resume-ai-frontend/src/app/features/resume-builder/templates/modern-resume-template/modern-resume-template.component.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resume-ai-frontend/src/app/features/resume-builder/templates/modern-resume-template/modern-resume-template.component.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resume-ai-frontend/src/app/shared/directives/contenteditable-model.directive.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resume-ai-frontend/.angular/cache/15.2.11/angular-webpack/a3b447b457624c28806731d4e90f3bfa098a16a7/0.pack" beforeDir="false" afterPath="$PROJECT_DIR$/resume-ai-frontend/.angular/cache/15.2.11/angular-webpack/a3b447b457624c28806731d4e90f3bfa098a16a7/0.pack" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resume-ai-frontend/.angular/cache/15.2.11/angular-webpack/a3b447b457624c28806731d4e90f3bfa098a16a7/1.pack" beforeDir="false" afterPath="$PROJECT_DIR$/resume-ai-frontend/.angular/cache/15.2.11/angular-webpack/a3b447b457624c28806731d4e90f3bfa098a16a7/1.pack" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resume-ai-frontend/.angular/cache/15.2.11/angular-webpack/a3b447b457624c28806731d4e90f3bfa098a16a7/11.pack" beforeDir="false" afterPath="$PROJECT_DIR$/resume-ai-frontend/.angular/cache/15.2.11/angular-webpack/a3b447b457624c28806731d4e90f3bfa098a16a7/11.pack" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resume-ai-frontend/.angular/cache/15.2.11/angular-webpack/a3b447b457624c28806731d4e90f3bfa098a16a7/13.pack" beforeDir="false" afterPath="$PROJECT_DIR$/resume-ai-frontend/.angular/cache/15.2.11/angular-webpack/a3b447b457624c28806731d4e90f3bfa098a16a7/13.pack" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resume-ai-frontend/.angular/cache/15.2.11/angular-webpack/a3b447b457624c28806731d4e90f3bfa098a16a7/2.pack" beforeDir="false" afterPath="$PROJECT_DIR$/resume-ai-frontend/.angular/cache/15.2.11/angular-webpack/a3b447b457624c28806731d4e90f3bfa098a16a7/2.pack" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resume-ai-frontend/.angular/cache/15.2.11/angular-webpack/a3b447b457624c28806731d4e90f3bfa098a16a7/3.pack" beforeDir="false" afterPath="$PROJECT_DIR$/resume-ai-frontend/.angular/cache/15.2.11/angular-webpack/a3b447b457624c28806731d4e90f3bfa098a16a7/3.pack" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resume-ai-frontend/.angular/cache/15.2.11/angular-webpack/a3b447b457624c28806731d4e90f3bfa098a16a7/4.pack" beforeDir="false" afterPath="$PROJECT_DIR$/resume-ai-frontend/.angular/cache/15.2.11/angular-webpack/a3b447b457624c28806731d4e90f3bfa098a16a7/4.pack" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resume-ai-frontend/.angular/cache/15.2.11/angular-webpack/a3b447b457624c28806731d4e90f3bfa098a16a7/5.pack" beforeDir="false" afterPath="$PROJECT_DIR$/resume-ai-frontend/.angular/cache/15.2.11/angular-webpack/a3b447b457624c28806731d4e90f3bfa098a16a7/5.pack" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resume-ai-frontend/.angular/cache/15.2.11/angular-webpack/a3b447b457624c28806731d4e90f3bfa098a16a7/6.pack" beforeDir="false" afterPath="$PROJECT_DIR$/resume-ai-frontend/.angular/cache/15.2.11/angular-webpack/a3b447b457624c28806731d4e90f3bfa098a16a7/6.pack" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resume-ai-frontend/.angular/cache/15.2.11/angular-webpack/a3b447b457624c28806731d4e90f3bfa098a16a7/7.pack" beforeDir="false" afterPath="$PROJECT_DIR$/resume-ai-frontend/.angular/cache/15.2.11/angular-webpack/a3b447b457624c28806731d4e90f3bfa098a16a7/7.pack" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resume-ai-frontend/.angular/cache/15.2.11/angular-webpack/a3b447b457624c28806731d4e90f3bfa098a16a7/index.pack" beforeDir="false" afterPath="$PROJECT_DIR$/resume-ai-frontend/.angular/cache/15.2.11/angular-webpack/a3b447b457624c28806731d4e90f3bfa098a16a7/index.pack" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resume-ai-frontend/.angular/cache/15.2.11/angular-webpack/a3b447b457624c28806731d4e90f3bfa098a16a7/index.pack.old" beforeDir="false" afterPath="$PROJECT_DIR$/resume-ai-frontend/.angular/cache/15.2.11/angular-webpack/a3b447b457624c28806731d4e90f3bfa098a16a7/index.pack.old" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resume-ai-frontend/.angular/cache/15.2.11/angular-webpack/d4622041baadd732fd2b396859535b233c710e40/0.pack" beforeDir="false" afterPath="$PROJECT_DIR$/resume-ai-frontend/.angular/cache/15.2.11/angular-webpack/d4622041baadd732fd2b396859535b233c710e40/0.pack" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resume-ai-frontend/.angular/cache/15.2.11/angular-webpack/d4622041baadd732fd2b396859535b233c710e40/1.pack" beforeDir="false" afterPath="$PROJECT_DIR$/resume-ai-frontend/.angular/cache/15.2.11/angular-webpack/d4622041baadd732fd2b396859535b233c710e40/1.pack" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resume-ai-frontend/.angular/cache/15.2.11/angular-webpack/d4622041baadd732fd2b396859535b233c710e40/14.pack" beforeDir="false" afterPath="$PROJECT_DIR$/resume-ai-frontend/.angular/cache/15.2.11/angular-webpack/d4622041baadd732fd2b396859535b233c710e40/14.pack" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resume-ai-frontend/.angular/cache/15.2.11/angular-webpack/d4622041baadd732fd2b396859535b233c710e40/16.pack" beforeDir="false" afterPath="$PROJECT_DIR$/resume-ai-frontend/.angular/cache/15.2.11/angular-webpack/d4622041baadd732fd2b396859535b233c710e40/16.pack" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resume-ai-frontend/.angular/cache/15.2.11/angular-webpack/d4622041baadd732fd2b396859535b233c710e40/19.pack" beforeDir="false" afterPath="$PROJECT_DIR$/resume-ai-frontend/.angular/cache/15.2.11/angular-webpack/d4622041baadd732fd2b396859535b233c710e40/19.pack" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resume-ai-frontend/.angular/cache/15.2.11/angular-webpack/d4622041baadd732fd2b396859535b233c710e40/21.pack" beforeDir="false" afterPath="$PROJECT_DIR$/resume-ai-frontend/.angular/cache/15.2.11/angular-webpack/d4622041baadd732fd2b396859535b233c710e40/21.pack" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resume-ai-frontend/.angular/cache/15.2.11/angular-webpack/d4622041baadd732fd2b396859535b233c710e40/5.pack" beforeDir="false" afterPath="$PROJECT_DIR$/resume-ai-frontend/.angular/cache/15.2.11/angular-webpack/d4622041baadd732fd2b396859535b233c710e40/5.pack" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resume-ai-frontend/.angular/cache/15.2.11/angular-webpack/d4622041baadd732fd2b396859535b233c710e40/7.pack" beforeDir="false" afterPath="$PROJECT_DIR$/resume-ai-frontend/.angular/cache/15.2.11/angular-webpack/d4622041baadd732fd2b396859535b233c710e40/7.pack" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resume-ai-frontend/.angular/cache/15.2.11/angular-webpack/d4622041baadd732fd2b396859535b233c710e40/8.pack" beforeDir="false" afterPath="$PROJECT_DIR$/resume-ai-frontend/.angular/cache/15.2.11/angular-webpack/d4622041baadd732fd2b396859535b233c710e40/8.pack" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resume-ai-frontend/.angular/cache/15.2.11/angular-webpack/d4622041baadd732fd2b396859535b233c710e40/index.pack" beforeDir="false" afterPath="$PROJECT_DIR$/resume-ai-frontend/.angular/cache/15.2.11/angular-webpack/d4622041baadd732fd2b396859535b233c710e40/index.pack" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resume-ai-frontend/.angular/cache/15.2.11/angular-webpack/d4622041baadd732fd2b396859535b233c710e40/index.pack.old" beforeDir="false" afterPath="$PROJECT_DIR$/resume-ai-frontend/.angular/cache/15.2.11/angular-webpack/d4622041baadd732fd2b396859535b233c710e40/index.pack.old" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resume-ai-frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/resume-ai-frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resume-ai-frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/resume-ai-frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resume-ai-frontend/src/app/app.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/resume-ai-frontend/src/app/app.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resume-ai-frontend/src/app/core/services/resume-builder-local.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/resume-ai-frontend/src/app/core/services/resume-builder-local.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resume-ai-frontend/src/app/features/resume-builder/resume-editor/resume-editor.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/resume-ai-frontend/src/app/features/resume-builder/resume-editor/resume-editor.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resume-ai-frontend/src/app/features/resume-builder/resume-editor/resume-editor.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/resume-ai-frontend/src/app/features/resume-builder/resume-editor/resume-editor.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resume-ai-frontend/src/app/features/resume-builder/resume-form/resume-form.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/resume-ai-frontend/src/app/features/resume-builder/resume-form/resume-form.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resume-ai-frontend/src/app/features/resume-builder/resume-form/resume-form.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/resume-ai-frontend/src/app/features/resume-builder/resume-form/resume-form.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resume-ai-frontend/src/app/features/resume-builder/resume-preview/resume-preview.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/resume-ai-frontend/src/app/features/resume-builder/resume-preview/resume-preview.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resume-ai-frontend/src/app/features/resume-builder/resume-preview/resume-preview.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/resume-ai-frontend/src/app/features/resume-builder/resume-preview/resume-preview.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resume-ai-frontend/src/app/features/resume-builder/template-card/template-card.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/resume-ai-frontend/src/app/features/resume-builder/template-card/template-card.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resume-ai-frontend/src/app/features/resume-builder/template-card/template-card.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/resume-ai-frontend/src/app/features/resume-builder/template-card/template-card.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resume-ai-frontend/src/app/features/resume-builder/template-dashboard/template-dashboard.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/resume-ai-frontend/src/app/features/resume-builder/template-dashboard/template-dashboard.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resume-ai-frontend/src/app/features/resume-builder/template-preview-modal/template-preview-modal.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/resume-ai-frontend/src/app/features/resume-builder/template-preview-modal/template-preview-modal.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resume-ai-frontend/src/app/features/resume-builder/template-preview-modal/template-preview-modal.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/resume-ai-frontend/src/app/features/resume-builder/template-preview-modal/template-preview-modal.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resume-ai-frontend/src/app/features/resume-editor/resume-editor-shell/resume-editor-shell.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/resume-ai-frontend/src/app/features/resume-editor/resume-editor-shell/resume-editor-shell.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resume-ai-frontend/src/app/features/resumes/my-resumes/my-resumes.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/resume-ai-frontend/src/app/features/resumes/my-resumes/my-resumes.component.ts" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="EmbeddingIndexingInfo">
+    <option name="cachedIndexableFilesCount" value="256" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/pom.xml" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/com/resumeai/resumebuilder/ResumeEditorService.java" root0="SKIP_INSPECTION" />
+  </component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6,
+  &quot;fromUser&quot;: false
+}</component>
+  <component name="ProjectId" id="3Cnd0giD7VZK0StfCfuGht0jM3Y" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Maven.resumeai [clean,install].executor": "Run",
+    "Maven.resumeai [clean].executor": "Run",
+    "Maven.resumeai [install].executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "Spring Boot.ResumeaiApplication.executor": "Run",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "com.google.cloudcode.ide_session_index": "20260430_0001",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "junie.onboarding.icon.badge.shown": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/GitHubPaymentRepos/resumeai",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "npm.start.executor": "Run",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "to.speed.mode.migration.done": "true",
+    "ts.external.directory.path": "C:\\GitHubPaymentRepos\\resumeai\\resume-ai-frontend\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="mvn clean" />
+      <command value="mvn install" />
+      <command value="mvn clean install" />
+    </option>
+  </component>
+  <component name="RunManager" selected="npm.start">
+    <configuration default="true" type="ShConfigurationType">
+      <option name="SCRIPT_TEXT" value="" />
+      <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
+      <option name="SCRIPT_PATH" value="" />
+      <option name="SCRIPT_OPTIONS" value="" />
+      <option name="INDEPENDENT_SCRIPT_WORKING_DIRECTORY" value="true" />
+      <option name="SCRIPT_WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="INDEPENDENT_INTERPRETER_PATH" value="true" />
+      <option name="INTERPRETER_PATH" value="powershell.exe" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="EXECUTE_IN_TERMINAL" value="true" />
+      <option name="EXECUTE_SCRIPT_FILE" value="true" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="ResumeaiApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="resumeai" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.resumeai.ResumeaiApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="start" type="js.build_tools.npm" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/resume-ai-frontend/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="start" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="npm.start" />
+      <item itemvalue="Spring Boot.ResumeaiApplication" />
+    </list>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="95feb4c2-01f1-4f59-968b-f82a05affbfc" name="Changes" comment="" />
+      <created>1777025049072</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1777025049072</updated>
+      <workItem from="1777025054283" duration="9033000" />
+      <workItem from="1777266249150" duration="741000" />
+      <workItem from="1777267040814" duration="146000" />
+      <workItem from="1777267213142" duration="132000" />
+      <workItem from="1777267379288" duration="238000" />
+      <workItem from="1777267706499" duration="23916000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

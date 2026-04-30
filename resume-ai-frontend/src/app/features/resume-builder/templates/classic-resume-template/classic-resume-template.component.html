@@ -1,0 +1,47 @@
+<article class="resume-page resume-template-classic">
+  <header class="resume-classic-header">
+    <h1
+      [appContenteditableModel]="document.personal.fullName"
+      [appContenteditableEnabled]="editable"
+      (appContenteditableModelChange)="updatePersonal({ fullName: $event })">
+    </h1>
+    <p
+      class="resume-headline"
+      [appContenteditableModel]="document.personal.headline || ''"
+      [appContenteditableEnabled]="editable"
+      (appContenteditableModelChange)="updatePersonal({ headline: $event })">
+    </p>
+
+    <p class="resume-contact-line">
+      <span
+        [appContenteditableModel]="document.personal.email"
+        [appContenteditableEnabled]="editable"
+        (appContenteditableModelChange)="updatePersonal({ email: $event })">
+      </span>
+      <span
+        [appContenteditableModel]="document.personal.phone"
+        [appContenteditableEnabled]="editable"
+        (appContenteditableModelChange)="updatePersonal({ phone: $event })">
+      </span>
+      <span
+        [appContenteditableModel]="document.personal.links || ''"
+        [appContenteditableEnabled]="editable"
+        (appContenteditableModelChange)="updatePersonal({ links: $event })">
+      </span>
+    </p>
+
+    <p
+      class="resume-summary"
+      [appContenteditableModel]="document.personal.summary"
+      [appContenteditableEnabled]="editable"
+      (appContenteditableModelChange)="updatePersonal({ summary: $event })">
+    </p>
+  </header>
+
+  <app-resume-section-renderer
+    *ngFor="let section of visibleSections(document); trackBy: trackBySectionId"
+    [section]="section"
+    [editable]="editable"
+    (sectionChange)="updateSection($event)">
+  </app-resume-section-renderer>
+</article>

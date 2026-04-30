@@ -1,0 +1,258 @@
+.resume-stage {
+  display: flex;
+  justify-content: center;
+  min-width: min-content;
+  color: var(--resume-text);
+  font-family: var(--resume-font), "Segoe UI", Arial, sans-serif;
+}
+
+.resume-page {
+  width: var(--resume-page-width);
+  min-height: var(--resume-page-min-height);
+  background: #ffffff;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.16);
+  overflow: hidden;
+}
+
+.resume-page h1,
+.resume-page h2,
+.resume-page h3,
+.resume-page p {
+  margin: 0;
+}
+
+.resume-hero {
+  display: grid;
+  grid-template-columns: 1fr 230px;
+  gap: 28px;
+  padding: 34px 38px;
+  background: var(--resume-primary);
+  color: #ffffff;
+}
+
+.resume-hero h1,
+.resume-classic-header h1,
+.resume-minimal-header h1 {
+  font-size: 34px;
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: 0;
+}
+
+.resume-hero .resume-summary {
+  margin-top: 12px;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.resume-headline {
+  margin-top: 7px;
+  color: var(--resume-secondary);
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.resume-hero .resume-headline {
+  color: rgba(255, 255, 255, 0.94);
+}
+
+.resume-contact {
+  display: grid;
+  gap: 8px;
+  align-content: start;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.resume-modern-grid {
+  display: grid;
+  grid-template-columns: 1fr 238px;
+  gap: 28px;
+  padding: 30px 38px 38px;
+}
+
+.resume-modern-grid main,
+.resume-modern-grid aside,
+.resume-template-classic,
+.resume-template-minimal {
+  display: grid;
+  align-content: start;
+  gap: var(--resume-section-gap);
+}
+
+.resume-modern-grid aside {
+  border-left: 1px solid #e5e7eb;
+  padding-left: 22px;
+}
+
+.resume-classic-header {
+  display: grid;
+  gap: 10px;
+  border-bottom: 2px solid var(--resume-primary);
+  padding-bottom: 18px;
+}
+
+.resume-template-classic {
+  padding: 38px 44px;
+}
+
+.resume-template-minimal {
+  padding: 34px 40px;
+}
+
+.resume-minimal-header {
+  display: grid;
+  grid-template-columns: 1fr 190px;
+  gap: 24px;
+  border-bottom: 1px solid #d1d5db;
+  padding-bottom: 16px;
+}
+
+.resume-minimal-header .resume-summary,
+.resume-classic-header .resume-summary {
+  margin-top: 8px;
+}
+
+.resume-contact-line {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px 12px;
+  color: #4b5563;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.resume-contact-line span:not(:last-child)::after {
+  content: "/";
+  margin-left: 12px;
+  color: #9ca3af;
+}
+
+.resume-document-section {
+  break-inside: avoid;
+}
+
+.resume-section-title {
+  color: var(--resume-primary);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  line-height: 1.3;
+  margin-bottom: 10px;
+  padding-bottom: 7px;
+  text-transform: uppercase;
+  border-bottom: 1px solid #d1d5db;
+}
+
+.resume-template-minimal .resume-section-title {
+  border-bottom: 0;
+  color: var(--resume-secondary);
+  padding-bottom: 0;
+}
+
+.resume-section-body {
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.resume-list {
+  display: grid;
+  gap: 13px;
+}
+
+.resume-entry {
+  break-inside: avoid;
+}
+
+.resume-entry-heading {
+  display: grid;
+  gap: 3px;
+}
+
+.resume-entry-heading strong {
+  color: #111827;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.resume-entry-heading span {
+  color: var(--resume-secondary);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.resume-entry-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px 10px;
+  margin-top: 4px;
+  color: #6b7280;
+  font-size: 11px;
+}
+
+.resume-entry-summary {
+  margin-top: 6px;
+  color: #374151;
+}
+
+.resume-entry ul {
+  margin: 7px 0 0 16px;
+  padding: 0;
+  color: #374151;
+}
+
+.resume-entry li + li {
+  margin-top: 4px;
+}
+
+.resume-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.resume-skill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 6px 8px;
+  background: #f9fafb;
+}
+
+.resume-skill small {
+  color: var(--resume-secondary);
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.resume-tech-list {
+  margin-top: 6px;
+  color: var(--resume-secondary);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.inline-editable {
+  border-radius: 4px;
+  outline: 1px dashed transparent;
+  outline-offset: 2px;
+}
+
+.inline-editable:hover,
+.inline-editable:focus {
+  background: rgba(251, 191, 36, 0.12);
+  outline-color: rgba(217, 119, 6, 0.55);
+}
+
+@media print {
+  body {
+    background: #ffffff !important;
+  }
+
+  .resume-page {
+    box-shadow: none;
+  }
+}

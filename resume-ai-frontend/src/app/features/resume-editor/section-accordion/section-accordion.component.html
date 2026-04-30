@@ -1,0 +1,96 @@
+<div *ngIf="section" class="shell-card p-6">
+  <div class="flex items-start justify-between gap-4">
+    <div>
+      <p class="eyebrow">{{ section.sectionType }}</p>
+      <h3 class="mt-2 text-2xl font-extrabold text-[#17172b]">{{ section.sectionTitle }}</h3>
+    </div>
+    <button class="btn-secondary px-4 py-2 text-sm" type="button" (click)="remove.emit()">Remove</button>
+  </div>
+
+  <div class="mt-5 space-y-4" [ngSwitch]="section.sectionType">
+    <input class="field" [(ngModel)]="section.sectionTitle" placeholder="Section title">
+
+    <ng-container *ngSwitchCase="'SUMMARY'">
+      <input class="field" [(ngModel)]="content.fullName" (ngModelChange)="emit()" placeholder="Full name">
+      <input class="field" [(ngModel)]="content.headline" (ngModelChange)="emit()" placeholder="Professional headline">
+      <input class="field" [(ngModel)]="content.email" (ngModelChange)="emit()" placeholder="Email">
+      <input class="field" [(ngModel)]="content.phone" (ngModelChange)="emit()" placeholder="Phone">
+      <input class="field" [(ngModel)]="content.links" (ngModelChange)="emit()" placeholder="Links">
+      <textarea class="field min-h-[140px]" [(ngModel)]="content.text" (ngModelChange)="emit()" placeholder="Professional summary"></textarea>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'EXPERIENCE'">
+      <div *ngFor="let item of ensureItems(); let i = index" class="rounded-[24px] bg-[#f8f9ff] p-4 space-y-3">
+        <div class="grid gap-3 md:grid-cols-2">
+          <input class="field" [(ngModel)]="item.company" (ngModelChange)="emit()" placeholder="Company">
+          <input class="field" [(ngModel)]="item.role" (ngModelChange)="emit()" placeholder="Role">
+          <input class="field" [(ngModel)]="item.location" (ngModelChange)="emit()" placeholder="Location">
+          <input class="field" [(ngModel)]="item.startDate" (ngModelChange)="emit()" placeholder="Start date">
+          <input class="field" [(ngModel)]="item.endDate" (ngModelChange)="emit()" placeholder="End date">
+        </div>
+        <div *ngFor="let line of item.description; let j = index" class="flex gap-3">
+          <input class="field" [(ngModel)]="item.description[j]" (ngModelChange)="emit()" placeholder="Impact bullet">
+          <button class="btn-secondary px-3 py-2 text-sm" type="button" (click)="removeDescription(item, j)">Remove</button>
+        </div>
+        <div class="flex gap-3">
+          <button class="btn-secondary text-sm" type="button" (click)="addDescription(item)">Add Bullet</button>
+          <button class="btn-secondary text-sm" type="button" (click)="removeItem(i)">Remove Experience</button>
+        </div>
+      </div>
+      <button class="btn-secondary" type="button" (click)="addExperienceItem()">Add Experience</button>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'EDUCATION'">
+      <div *ngFor="let item of ensureItems(); let i = index" class="rounded-[24px] bg-[#f8f9ff] p-4">
+        <div class="grid gap-3 md:grid-cols-2">
+          <input class="field" [(ngModel)]="item.degree" (ngModelChange)="emit()" placeholder="Degree">
+          <input class="field" [(ngModel)]="item.institute" (ngModelChange)="emit()" placeholder="Institute">
+          <input class="field" [(ngModel)]="item.location" (ngModelChange)="emit()" placeholder="Location">
+          <input class="field" [(ngModel)]="item.startDate" (ngModelChange)="emit()" placeholder="Start year">
+          <input class="field" [(ngModel)]="item.endDate" (ngModelChange)="emit()" placeholder="End year">
+        </div>
+        <button class="btn-secondary mt-3 text-sm" type="button" (click)="removeItem(i)">Remove Education</button>
+      </div>
+      <button class="btn-secondary" type="button" (click)="addEducationItem()">Add Education</button>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'SKILLS'">
+      <div *ngFor="let group of ensureGroups(); let i = index" class="rounded-[24px] bg-[#f8f9ff] p-4">
+        <input class="field" [(ngModel)]="group.title" (ngModelChange)="emit()" placeholder="Group title">
+        <div class="mt-3 space-y-3">
+          <div *ngFor="let skill of group.skills; let j = index" class="flex gap-3">
+            <input class="field" [(ngModel)]="group.skills[j]" (ngModelChange)="emit()" placeholder="Skill">
+            <button class="btn-secondary px-3 py-2 text-sm" type="button" (click)="removeSkill(group, j)">Remove</button>
+          </div>
+        </div>
+        <div class="mt-3 flex gap-3">
+          <button class="btn-secondary text-sm" type="button" (click)="addSkill(group)">Add Skill</button>
+          <button class="btn-secondary text-sm" type="button" (click)="removeGroup(i)">Remove Group</button>
+        </div>
+      </div>
+      <button class="btn-secondary" type="button" (click)="addGroup()">Add Skill Group</button>
+    </ng-container>
+
+    <ng-container *ngSwitchDefault>
+      <div *ngFor="let item of ensureItems(); let i = index" class="rounded-[24px] bg-[#f8f9ff] p-4 space-y-3">
+        <input class="field" [(ngModel)]="item.title" (ngModelChange)="emit()" placeholder="Title">
+        <input *ngIf="section.sectionType === 'PROJECTS'" class="field" [(ngModel)]="item.subtitle" (ngModelChange)="emit()" placeholder="Subtitle / stack">
+        <input *ngIf="section.sectionType === 'CERTIFICATIONS'" class="field" [(ngModel)]="item.issuer" (ngModelChange)="emit()" placeholder="Issuer">
+        <input *ngIf="section.sectionType === 'CERTIFICATIONS'" class="field" [(ngModel)]="item.year" (ngModelChange)="emit()" placeholder="Year">
+        <input *ngIf="section.sectionType === 'LANGUAGES'" class="field" [(ngModel)]="item.name" (ngModelChange)="emit()" placeholder="Language name">
+        <input *ngIf="section.sectionType === 'LANGUAGES'" class="field" [(ngModel)]="item.level" (ngModelChange)="emit()" placeholder="Level">
+        <div *ngIf="section.sectionType === 'PROJECTS' || section.sectionType === 'CUSTOM'">
+          <div *ngFor="let line of item.description; let j = index" class="mb-3 flex gap-3">
+            <input class="field" [(ngModel)]="item.description[j]" (ngModelChange)="emit()" placeholder="Description line">
+            <button class="btn-secondary px-3 py-2 text-sm" type="button" (click)="removeDescription(item, j)">Remove</button>
+          </div>
+          <button class="btn-secondary text-sm" type="button" (click)="addDescription(item)">Add Line</button>
+        </div>
+        <button class="btn-secondary text-sm" type="button" (click)="removeItem(i)">Remove Item</button>
+      </div>
+      <button class="btn-secondary" type="button" (click)="addGenericItem()">Add Item</button>
+    </ng-container>
+  </div>
+
+  <button class="btn-primary mt-6" type="button" (click)="save.emit()">Save Section</button>
+</div>

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="840" viewBox="0 0 600 840">
+  <rect width="600" height="840" rx="28" fill="#edf7ff"/>
+  <rect x="42" y="30" width="516" height="780" rx="22" fill="#ffffff"/>
+  <rect x="42" y="30" width="516" height="126" rx="22" fill="#0f766e"/>
+  <rect x="62" y="66" width="220" height="18" rx="9" fill="#ffffff"/>
+  <rect x="62" y="98" width="204" height="10" rx="5" fill="#ccfbf1"/>
+  <rect x="62" y="186" width="188" height="12" rx="6" fill="#0f766e"/>
+  <rect x="62" y="216" width="466" height="10" rx="5" fill="#d7def2"/>
+  <rect x="62" y="240" width="450" height="10" rx="5" fill="#e8edf9"/>
+  <rect x="62" y="264" width="432" height="10" rx="5" fill="#e8edf9"/>
+  <rect x="62" y="314" width="188" height="12" rx="6" fill="#0f766e"/>
+  <rect x="62" y="344" width="466" height="10" rx="5" fill="#d7def2"/>
+  <rect x="62" y="368" width="444" height="10" rx="5" fill="#e8edf9"/>
+  <rect x="62" y="418" width="188" height="12" rx="6" fill="#0f766e"/>
+  <rect x="62" y="448" width="150" height="38" rx="19" fill="#ecfeff"/>
+  <rect x="224" y="448" width="150" height="38" rx="19" fill="#ecfeff"/>
+  <rect x="386" y="448" width="140" height="38" rx="19" fill="#ecfeff"/>
+  <text x="62" y="690" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#111827">Java Developer Resume</text>
+  <text x="62" y="726" font-family="Arial, sans-serif" font-size="18" fill="#667085">Mid-level backend focused</text>
+</svg>

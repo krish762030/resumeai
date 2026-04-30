@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="840" viewBox="0 0 600 840">
+  <rect width="600" height="840" rx="28" fill="#eefaf5"/>
+  <rect x="42" y="30" width="516" height="780" rx="22" fill="#ffffff"/>
+  <rect x="42" y="30" width="516" height="126" rx="22" fill="#166534"/>
+  <rect x="62" y="66" width="240" height="18" rx="9" fill="#ffffff"/>
+  <rect x="62" y="98" width="204" height="10" rx="5" fill="#d1fae5"/>
+  <rect x="62" y="186" width="146" height="12" rx="6" fill="#166534"/>
+  <rect x="62" y="216" width="466" height="10" rx="5" fill="#d7def2"/>
+  <rect x="62" y="240" width="442" height="10" rx="5" fill="#e8edf9"/>
+  <rect x="62" y="286" width="146" height="12" rx="6" fill="#166534"/>
+  <rect x="62" y="316" width="466" height="10" rx="5" fill="#d7def2"/>
+  <rect x="62" y="340" width="402" height="10" rx="5" fill="#e8edf9"/>
+  <rect x="62" y="386" width="146" height="12" rx="6" fill="#166534"/>
+  <rect x="62" y="416" width="170" height="38" rx="19" fill="#ecfdf3"/>
+  <rect x="244" y="416" width="150" height="38" rx="19" fill="#ecfdf3"/>
+  <rect x="406" y="416" width="120" height="38" rx="19" fill="#ecfdf3"/>
+  <rect x="62" y="500" width="466" height="12" rx="6" fill="#166534"/>
+  <rect x="62" y="530" width="466" height="10" rx="5" fill="#d7def2"/>
+  <rect x="62" y="554" width="430" height="10" rx="5" fill="#e8edf9"/>
+  <text x="62" y="690" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#111827">Fresher Software Developer</text>
+  <text x="62" y="726" font-family="Arial, sans-serif" font-size="18" fill="#667085">Entry-level developer resume</text>
+</svg>

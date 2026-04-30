@@ -1,0 +1,51 @@
+<div class="mx-auto max-w-4xl space-y-6">
+  <div class="glass-panel p-6">
+    <p class="text-sm font-semibold uppercase tracking-[0.28em] text-poppy">Admin Template Upload</p>
+    <h2 class="section-title mt-2 text-4xl">Upload an editable ATS template</h2>
+    <p class="mt-4 max-w-3xl text-base leading-7 text-ink/65">
+      Upload the preview image users should see in the template gallery and optionally upload the HTML template file they will actually edit.
+      Use placeholders like <code ngNonBindable>{{fullName}}</code>, <code ngNonBindable>{{headline}}</code>, <code ngNonBindable>{{email}}</code>,
+      <code ngNonBindable>{{phone}}</code>, <code ngNonBindable>{{links}}</code>, and section placeholders like <code ngNonBindable>{{projectsSection}}</code>.
+    </p>
+  </div>
+
+  <form class="glass-panel space-y-5 p-6" [formGroup]="form" (ngSubmit)="submit()">
+    <div class="grid gap-4 md:grid-cols-2">
+      <input class="field" formControlName="name" placeholder="Template name">
+      <input class="field" formControlName="category" placeholder="Category">
+    </div>
+
+    <div class="grid gap-4 md:grid-cols-2">
+      <label class="flex items-center gap-3 rounded-2xl border border-black/10 bg-white/90 px-4 py-3 text-sm text-ink">
+        <input type="checkbox" formControlName="atsFriendly">
+        ATS-friendly
+      </label>
+      <label class="flex items-center gap-3 rounded-2xl border border-black/10 bg-white/90 px-4 py-3 text-sm text-ink">
+        <input type="checkbox" formControlName="premium">
+        Premium template
+      </label>
+    </div>
+
+    <div class="grid gap-4 md:grid-cols-2">
+      <div>
+        <label class="mb-2 block text-sm font-semibold text-ink/70">Preview image</label>
+        <input class="field" type="file" accept="image/*" (change)="onPreviewImageSelected($event)">
+      </div>
+      <div>
+        <label class="mb-2 block text-sm font-semibold text-ink/70">HTML template file</label>
+        <input class="field" type="file" accept=".html,text/html" (change)="onTemplateFileSelected($event)">
+        <p class="mt-2 text-xs leading-6 text-ink/55">
+          Optional. If skipped, users will still see this uploaded template card and edit it using the default ATS-friendly editable layout.
+        </p>
+      </div>
+    </div>
+
+    <p *ngIf="error" class="rounded-2xl bg-poppy/10 px-4 py-3 text-sm font-medium text-poppy">{{ error }}</p>
+    <p *ngIf="success" class="rounded-2xl bg-pine/10 px-4 py-3 text-sm font-medium text-pine">{{ success }}</p>
+
+    <div class="flex gap-3">
+      <button class="btn-primary" type="submit" [disabled]="submitting">{{ submitting ? 'Uploading...' : 'Upload Template' }}</button>
+      <a routerLink="/templates" class="btn-secondary">View Template Gallery</a>
+    </div>
+  </form>
+</div>

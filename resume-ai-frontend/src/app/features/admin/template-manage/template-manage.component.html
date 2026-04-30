@@ -1,0 +1,39 @@
+<app-loader *ngIf="loading" message="Loading template inventory"></app-loader>
+
+<div *ngIf="!loading" class="space-y-6">
+  <div class="glass-panel p-6">
+    <p class="text-sm font-semibold uppercase tracking-[0.28em] text-poppy">Admin Template Manager</p>
+    <h2 class="section-title mt-2 text-4xl">Live templates visible to users</h2>
+    <p class="mt-4 text-base leading-7 text-ink/65">
+      This page helps verify whether uploaded templates are actually available in the public gallery.
+    </p>
+  </div>
+
+  <div class="grid gap-4">
+    <article *ngFor="let template of templates" class="glass-panel p-5">
+      <div class="flex flex-wrap items-start justify-between gap-4">
+        <div class="flex gap-4">
+          <img [src]="template.previewImageUrl" [alt]="template.name" class="h-28 w-24 rounded-2xl object-cover object-top">
+          <div>
+            <p class="text-sm font-semibold uppercase tracking-[0.28em] text-ink/45">{{ template.category }}</p>
+            <h3 class="section-title mt-2 text-2xl">{{ template.name }}</h3>
+            <p class="mt-3 text-sm text-ink/65">
+              Source:
+              <span class="font-semibold" [ngClass]="isUploadedTemplate(template) ? 'text-blue-600' : 'text-ink'">
+                {{ isUploadedTemplate(template) ? 'Uploaded template' : 'Seeded template' }}
+              </span>
+            </p>
+            <p class="mt-1 text-sm text-ink/55">Preview URL: {{ template.previewImageUrl }}</p>
+          </div>
+        </div>
+
+        <div class="flex gap-3">
+          <span class="rounded-full px-3 py-2 text-xs font-bold" [ngClass]="template.premium ? 'bg-poppy/10 text-poppy' : 'bg-pine/10 text-pine'">
+            {{ template.premium ? 'Premium' : 'Free' }}
+          </span>
+          <a [routerLink]="['/resume-builder/create', template.id]" class="btn-secondary px-4 py-2 text-sm">Open as User</a>
+        </div>
+      </div>
+    </article>
+  </div>
+</div>

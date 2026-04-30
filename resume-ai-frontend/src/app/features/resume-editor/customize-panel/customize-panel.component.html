@@ -1,0 +1,49 @@
+<div class="shell-card p-6">
+  <div class="flex items-start justify-between gap-3">
+    <div>
+      <p class="eyebrow">Customize</p>
+      <h3 class="mt-2 text-2xl font-extrabold text-[#17172b]">Theme and layout</h3>
+    </div>
+    <span class="rounded-full px-3 py-1.5 text-xs font-bold" [ngClass]="premium ? 'bg-[#ecfdf3] text-[#16a34a]' : 'bg-[#fff0f0] text-[#ef4444]'">
+      {{ premium ? 'Premium unlocked' : 'Premium only' }}
+    </span>
+  </div>
+
+  <div class="mt-5 grid gap-4 md:grid-cols-2">
+    <label class="text-sm font-semibold text-[#475467]">Header color
+      <input class="field mt-2" type="color" [(ngModel)]="theme.headerColor" (ngModelChange)="emit()">
+    </label>
+    <label class="text-sm font-semibold text-[#475467]">Primary color
+      <input class="field mt-2" type="color" [(ngModel)]="theme.primaryColor" (ngModelChange)="emit()">
+    </label>
+    <label class="text-sm font-semibold text-[#475467]">Font family
+      <select class="field mt-2" [(ngModel)]="theme.fontFamily" (ngModelChange)="emit()">
+        <option>Poppins</option>
+        <option>Manrope</option>
+        <option>Mulish</option>
+        <option>Work Sans</option>
+      </select>
+    </label>
+    <label class="text-sm font-semibold text-[#475467]">Layout
+      <select class="field mt-2" [(ngModel)]="theme.layout" (ngModelChange)="emit()">
+        <option value="single-column">Single column</option>
+        <option value="two-column">Two column</option>
+      </select>
+    </label>
+    <label class="text-sm font-semibold text-[#475467]">Header font size
+      <input class="field mt-2" type="number" [(ngModel)]="theme.headerFontSize" (ngModelChange)="emit()">
+    </label>
+    <label class="text-sm font-semibold text-[#475467]">Body font size
+      <input class="field mt-2" type="number" [(ngModel)]="theme.bodyFontSize" (ngModelChange)="emit()">
+    </label>
+    <label class="text-sm font-semibold text-[#475467]">Section style
+      <select class="field mt-2" [(ngModel)]="theme.sectionStyle" (ngModelChange)="emit()">
+        <option value="underline">Underline</option>
+        <option value="pill">Pill</option>
+        <option value="plain">Plain</option>
+      </select>
+    </label>
+  </div>
+
+  <button class="btn-primary mt-6" type="button" [disabled]="!premium" (click)="save.emit()">Save Theme</button>
+</div>

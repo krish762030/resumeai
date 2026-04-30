@@ -1,0 +1,32 @@
+<ng-container *ngIf="document as doc">
+  <div class="resume-stage" [ngStyle]="cssVariables(doc)" [ngSwitch]="doc.templateKey">
+    <app-modern-resume-template
+      *ngSwitchCase="'modern'"
+      [document]="doc"
+      [editable]="editable"
+      (documentChange)="documentChange.emit($event)">
+    </app-modern-resume-template>
+
+    <app-classic-resume-template
+      *ngSwitchCase="'classic'"
+      [document]="doc"
+      [editable]="editable"
+      (documentChange)="documentChange.emit($event)">
+    </app-classic-resume-template>
+
+    <app-minimal-resume-template
+      *ngSwitchCase="'minimal'"
+      [document]="doc"
+      [editable]="editable"
+      (documentChange)="documentChange.emit($event)">
+    </app-minimal-resume-template>
+
+    <app-modern-resume-template
+      *ngSwitchDefault
+      [document]="doc"
+      [editable]="editable"
+      (documentChange)="documentChange.emit($event)">
+    </app-modern-resume-template>
+  </div>
+</ng-container>
+

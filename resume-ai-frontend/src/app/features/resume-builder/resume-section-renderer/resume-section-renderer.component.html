@@ -1,0 +1,155 @@
+<ng-container *ngIf="section">
+  <section class="resume-document-section">
+    <h2
+      class="resume-section-title"
+      [appContenteditableModel]="section.title"
+      [appContenteditableEnabled]="editable"
+      (appContenteditableModelChange)="updateTitle($event)">
+    </h2>
+
+    <div *ngIf="experienceSection as experience" class="resume-section-body resume-list">
+      <article *ngFor="let item of experience.items; trackBy: trackById" class="resume-entry">
+        <div class="resume-entry-heading">
+          <strong
+            [appContenteditableModel]="item.position"
+            [appContenteditableEnabled]="editable"
+            (appContenteditableModelChange)="updateExperience(item.id, { position: $event })">
+          </strong>
+          <span
+            [appContenteditableModel]="item.company"
+            [appContenteditableEnabled]="editable"
+            (appContenteditableModelChange)="updateExperience(item.id, { company: $event })">
+          </span>
+        </div>
+        <div class="resume-entry-meta">
+          <span
+            [appContenteditableModel]="item.location || ''"
+            [appContenteditableEnabled]="editable"
+            (appContenteditableModelChange)="updateExperience(item.id, { location: $event })">
+          </span>
+          <span
+            [appContenteditableModel]="item.startDate + ' - ' + item.endDate"
+            [appContenteditableEnabled]="editable"
+            (appContenteditableModelChange)="updateExperienceDateRange(item.id, $event)">
+          </span>
+        </div>
+        <p
+          *ngIf="item.summary"
+          class="resume-entry-summary"
+          [appContenteditableModel]="item.summary"
+          [appContenteditableEnabled]="editable"
+          (appContenteditableModelChange)="updateExperience(item.id, { summary: $event })">
+        </p>
+        <ul *ngIf="item.highlights.length">
+          <li
+            *ngFor="let highlight of item.highlights; let i = index"
+            [appContenteditableModel]="highlight"
+            [appContenteditableEnabled]="editable"
+            (appContenteditableModelChange)="updateExperienceHighlight(item.id, i, $event)">
+          </li>
+        </ul>
+      </article>
+    </div>
+
+    <div *ngIf="educationSection as education" class="resume-section-body resume-list">
+      <article *ngFor="let item of education.items; trackBy: trackById" class="resume-entry">
+        <div class="resume-entry-heading">
+          <strong
+            [appContenteditableModel]="item.degree"
+            [appContenteditableEnabled]="editable"
+            (appContenteditableModelChange)="updateEducation(item.id, { degree: $event })">
+          </strong>
+          <span
+            [appContenteditableModel]="item.institution"
+            [appContenteditableEnabled]="editable"
+            (appContenteditableModelChange)="updateEducation(item.id, { institution: $event })">
+          </span>
+        </div>
+        <div class="resume-entry-meta">
+          <span
+            [appContenteditableModel]="item.field || ''"
+            [appContenteditableEnabled]="editable"
+            (appContenteditableModelChange)="updateEducation(item.id, { field: $event })">
+          </span>
+          <span
+            [appContenteditableModel]="item.endDate || ''"
+            [appContenteditableEnabled]="editable"
+            (appContenteditableModelChange)="updateEducation(item.id, { endDate: $event })">
+          </span>
+          <span
+            *ngIf="item.score"
+            [appContenteditableModel]="item.score"
+            [appContenteditableEnabled]="editable"
+            (appContenteditableModelChange)="updateEducation(item.id, { score: $event })">
+          </span>
+        </div>
+      </article>
+    </div>
+
+    <div *ngIf="skillsSection as skills" class="resume-section-body resume-skills">
+      <div *ngFor="let skill of skills.items; trackBy: trackById" class="resume-skill">
+        <span
+          [appContenteditableModel]="skill.name"
+          [appContenteditableEnabled]="editable"
+          (appContenteditableModelChange)="updateSkill(skill.id, { name: $event })">
+        </span>
+        <small>{{ skill.level }}</small>
+      </div>
+    </div>
+
+    <div *ngIf="projectsSection as projects" class="resume-section-body resume-list">
+      <article *ngFor="let item of projects.items; trackBy: trackById" class="resume-entry">
+        <div class="resume-entry-heading">
+          <strong
+            [appContenteditableModel]="item.name"
+            [appContenteditableEnabled]="editable"
+            (appContenteditableModelChange)="updateProject(item.id, { name: $event })">
+          </strong>
+          <span
+            *ngIf="item.role"
+            [appContenteditableModel]="item.role"
+            [appContenteditableEnabled]="editable"
+            (appContenteditableModelChange)="updateProject(item.id, { role: $event })">
+          </span>
+        </div>
+        <p
+          class="resume-entry-summary"
+          [appContenteditableModel]="item.description"
+          [appContenteditableEnabled]="editable"
+          (appContenteditableModelChange)="updateProject(item.id, { description: $event })">
+        </p>
+        <p
+          class="resume-tech-list"
+          [appContenteditableModel]="item.technologies.join(', ')"
+          [appContenteditableEnabled]="editable"
+          (appContenteditableModelChange)="updateProjectTechnologies(item.id, $event)">
+        </p>
+      </article>
+    </div>
+
+    <div *ngIf="customSection as custom" class="resume-section-body resume-list">
+      <article *ngFor="let item of custom.items; trackBy: trackById" class="resume-entry">
+        <div class="resume-entry-heading">
+          <strong
+            [appContenteditableModel]="item.title"
+            [appContenteditableEnabled]="editable"
+            (appContenteditableModelChange)="updateCustomItem(item.id, { title: $event })">
+          </strong>
+          <span
+            *ngIf="item.subtitle"
+            [appContenteditableModel]="item.subtitle"
+            [appContenteditableEnabled]="editable"
+            (appContenteditableModelChange)="updateCustomItem(item.id, { subtitle: $event })">
+          </span>
+        </div>
+        <p
+          *ngIf="item.description"
+          class="resume-entry-summary"
+          [appContenteditableModel]="item.description"
+          [appContenteditableEnabled]="editable"
+          (appContenteditableModelChange)="updateCustomItem(item.id, { description: $event })">
+        </p>
+      </article>
+    </div>
+  </section>
+</ng-container>

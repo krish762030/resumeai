@@ -1,0 +1,68 @@
+<div class="app-shell px-4 py-6 md:px-8">
+  <div class="mx-auto grid min-h-[calc(100vh-3rem)] max-w-[1320px] gap-6 lg:grid-cols-[0.98fr_0.82fr]">
+    <section class="relative hidden overflow-hidden rounded-[36px] bg-[#f7f7ff] p-10 lg:block">
+      <div class="absolute -left-16 top-12 h-56 w-56 rounded-full bg-[#dfe2ff] blur-3xl"></div>
+      <div class="absolute -bottom-16 right-0 h-64 w-64 rounded-full bg-[#ece7ff] blur-3xl"></div>
+      <div class="relative">
+        <div class="flex items-center gap-3">
+          <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-[#5b5cf0] to-[#7c4dff] text-sm font-extrabold text-white">R</div>
+          <div>
+            <p class="text-sm font-bold text-[#1a1e3b]">ResumeAI</p>
+            <p class="text-xs text-[#6f76a3]">Career cockpit for faster applications</p>
+          </div>
+        </div>
+
+        <p class="eyebrow mt-10">Candidate Workspace</p>
+        <h1 class="section-title mt-4 max-w-xl text-5xl leading-[1.02] text-[#1a1e3b] xl:text-6xl">
+          Build, score, and tailor resumes inside one focused workflow.
+        </h1>
+        <p class="mt-6 max-w-xl text-lg leading-8 text-[#626b94]">
+          The product now follows a more structured page flow: guided onboarding, cleaner builder screens, sharper dashboards, and upgrade prompts that feel product-led instead of generic.
+        </p>
+
+        <div class="mt-10 grid gap-4 md:grid-cols-2">
+          <article class="rounded-[28px] bg-white p-5 shadow-[0_16px_36px_rgba(91,92,240,0.08)]">
+            <p class="text-sm text-[#7a81ad]">ATS readiness</p>
+            <p class="mt-2 text-3xl font-extrabold text-[#1a1e3b]">82 / 100</p>
+            <p class="mt-3 text-sm leading-6 text-[#68708f]">Track resume quality and fix weak sections before applying.</p>
+          </article>
+          <article class="rounded-[28px] bg-[#5b5cf0] p-5 text-white shadow-[0_18px_36px_rgba(91,92,240,0.22)]">
+            <p class="text-sm text-white/70">Match precision</p>
+            <p class="mt-2 text-3xl font-extrabold">12 live roles</p>
+            <p class="mt-3 text-sm leading-6 text-white/80">Surface role-fit gaps with matched and missing skills side by side.</p>
+          </article>
+        </div>
+
+        <div class="mt-10 rounded-[30px] border border-white/70 bg-white/70 p-6 backdrop-blur">
+          <div class="grid grid-cols-[1fr_220px] gap-6">
+            <div>
+              <p class="eyebrow">Live Builder</p>
+              <h2 class="mt-3 text-2xl font-extrabold text-[#1a1e3b]">Structured content, cleaner decisions</h2>
+              <ul class="mt-5 space-y-3 text-sm leading-6 text-[#68708f]">
+                <li>Multi-step resume forms aligned to real section priorities.</li>
+                <li>Dedicated preview space with editing and download checkpoints.</li>
+                <li>Upgrade states integrated into the flow rather than isolated pages.</li>
+              </ul>
+            </div>
+            <div class="rounded-[24px] bg-[#f3f4ff] p-4">
+              <div class="rounded-[20px] bg-white p-4 shadow-[0_10px_26px_rgba(26,30,59,0.08)]">
+                <div class="h-2.5 w-20 rounded-full bg-[#d7dbff]"></div>
+                <div class="mt-4 space-y-3">
+                  <div class="h-3 rounded-full bg-[#eceeff]"></div>
+                  <div class="h-3 w-5/6 rounded-full bg-[#eceeff]"></div>
+                  <div class="h-20 rounded-[18px] bg-[#f6f7ff]"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="flex items-center">
+      <div class="w-full">
+        <router-outlet></router-outlet>
+      </div>
+    </section>
+  </div>
+</div>
