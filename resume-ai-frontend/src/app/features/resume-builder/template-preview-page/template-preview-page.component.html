@@ -16,8 +16,8 @@
         (click)="toggleFavorite()">
         <span [innerHTML]="isFavorite ? '&#9829;' : '&#9825;'"></span>
       </button>
-      <button class="btn-primary" type="button" (click)="onUseTemplate()">
-        {{ canUseTemplate ? 'Use this template' : 'Upgrade to use' }}
+      <button class="btn-primary" type="button" [disabled]="creating" (click)="onUseTemplate()">
+        {{ creating ? 'Opening editor...' : (canUseTemplate ? 'Use this template' : 'Upgrade to use') }}
       </button>
     </div>
   </header>

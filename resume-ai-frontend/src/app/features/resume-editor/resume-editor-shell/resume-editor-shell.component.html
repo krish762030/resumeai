@@ -74,7 +74,7 @@
           <app-section-accordion
             [section]="selectedSection"
             [content]="sectionDraft"
-            (contentChange)="sectionDraft = $event"
+            (contentChange)="onSectionDraftChange($event)"
             (save)="saveSelectedSection()"
             (remove)="removeSelectedSection()">
           </app-section-accordion>
@@ -101,6 +101,6 @@
       <p *ngIf="error" class="rounded-2xl bg-[#fff1f1] px-4 py-3 text-sm font-medium text-[#ef4444]">{{ error }}</p>
     </section>
 
-    <app-resume-editor-preview [html]="resume.generatedHtml"></app-resume-editor-preview>
+    <app-resume-editor-preview [document]="previewDocument" [html]="resume.generatedHtml"></app-resume-editor-preview>
   </div>
 </div>

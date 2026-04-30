@@ -47,7 +47,12 @@ export class ResumeEditorComponent implements OnInit, OnDestroy {
   readonly templateOptions: Array<{ key: ResumeTemplateKey; label: string }> = [
     { key: 'modern', label: 'Modern' },
     { key: 'classic', label: 'Classic' },
-    { key: 'minimal', label: 'Minimal' }
+    { key: 'minimal', label: 'Minimal' },
+    { key: 'ats', label: 'ATS' },
+    { key: 'developer', label: 'Developer' },
+    { key: 'compact', label: 'Compact' },
+    { key: 'creative', label: 'Creative' },
+    { key: 'professional', label: 'Professional' }
   ];
   readonly fontOptions = ['Source Sans Pro', 'Karla', 'Mulish', 'Lato', 'Roboto', 'Work Sans'];
   readonly colorThemes = [

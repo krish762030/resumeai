@@ -19,6 +19,7 @@ export class TemplatePreviewPageComponent implements OnInit {
   template: ResumeTemplate | null = null;
   usageLimit: UsageLimit | null = null;
   favoriteIds = new Set<number>();
+  creating = false;
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -87,6 +88,24 @@ export class TemplatePreviewPageComponent implements OnInit {
     if (this.template.premium && !this.usageLimit?.premium) {
       void this.router.navigate(['/pricing'], {
         queryParams: { templateId: this.template.id, source: 'preview' }
+      });
+      return;
+    }
+
+    if (this.authService.isAuthenticated()) {
+      this.creating = true;
+      this.resumeService.createEditorResume({
+        templateId: this.template.id,
+        title: 'Untitled Resume'
+      }).subscribe({
+        next: (resume) => {
+          this.creating = false;
+          void this.router.navigate(['/resume-editor', resume.id, 'content']);
+        },
+        error: () => {
+          this.creating = false;
+          this.error = 'Template could not be opened in the editor.';
+        }
       });
       return;
     }

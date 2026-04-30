@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ResumeDocument } from '../../../core/models/resume-document.model';
+import { createResumeDocumentFromEditorResume } from '../../../core/models/resume-document.utils';
 import {
   ResumeEditorResume,
   ResumeEditorState,
@@ -10,12 +12,15 @@ import {
 } from '../../../core/models/resume.model';
 import { PdfExportService } from '../../../core/services/pdf-export.service';
 import { ResumeService } from '../../../core/services/resume.service';
+import { ResumeEditorPreviewComponent } from '../resume-preview/resume-preview.component';
 
 @Component({
   selector: 'app-resume-editor-shell',
   templateUrl: './resume-editor-shell.component.html'
 })
 export class ResumeEditorShellComponent implements OnInit {
+  @ViewChild(ResumeEditorPreviewComponent) previewComponent?: ResumeEditorPreviewComponent;
+
   loading = true;
   saving = false;
   error = '';
@@ -87,6 +92,24 @@ export class ResumeEditorShellComponent implements OnInit {
     return this.state.sections.find((section) => section.id === this.state.selectedSectionId) ?? null;
   }
 
+  get selectedTemplate(): ResumeTemplate | null {
+    if (!this.resume) {
+      return null;
+    }
+    return this.templates.find((template) => template.id === this.resume?.templateId) ?? null;
+  }
+
+  get previewDocument(): ResumeDocument | null {
+    if (!this.resume) {
+      return null;
+    }
+    return createResumeDocumentFromEditorResume({
+      ...this.resume,
+      sections: this.state.sections,
+      themeJson: JSON.stringify(this.state.theme)
+    }, this.selectedTemplate);
+  }
+
   onActiveTabChange(tab: 'overview' | 'content' | 'customize' | 'ai'): void {
     this.state = { ...this.state, activeTab: tab };
     if (this.resume) {
@@ -128,17 +151,42 @@ export class ResumeEditorShellComponent implements OnInit {
   }
 
   async onDownload(): Promise<void> {
-    if (!this.resume?.generatedHtml) {
+    if (!this.resume) {
       return;
     }
     try {
-      await this.pdfExportService.exportHtmlWithHtml2Pdf(
-        this.resume.generatedHtml,
-        `${this.fileName(this.resume.title)}.pdf`
-      );
+      const resumeElement = this.previewComponent?.resumeElement;
+      if (this.previewDocument && resumeElement) {
+        await this.pdfExportService.exportElementWithHtml2Pdf(
+          resumeElement,
+          `${this.fileName(this.resume.title)}.pdf`,
+          this.previewDocument.theme.pageSize === 'Letter' ? 'letter' : 'a4'
+        );
+        return;
+      }
+
+      if (this.resume.generatedHtml) {
+        await this.pdfExportService.exportHtmlWithHtml2Pdf(
+          this.resume.generatedHtml,
+          `${this.fileName(this.resume.title)}.pdf`
+        );
+      }
     } catch (error) {
       this.error = error instanceof Error ? error.message : 'Unable to generate PDF.';
     }
+  }
+
+  onSectionDraftChange(content: Record<string, any>): void {
+    this.sectionDraft = content;
+    if (!this.selectedSection) {
+      return;
+    }
+    this.state = {
+      ...this.state,
+      sections: this.state.sections.map((section) => section.id === this.selectedSection?.id
+        ? { ...section, contentJson: JSON.stringify(content) }
+        : section)
+    };
   }
 
   selectSection(sectionId: number): void {

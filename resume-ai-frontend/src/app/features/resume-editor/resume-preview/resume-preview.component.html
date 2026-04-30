@@ -1,5 +1,13 @@
 <section class="shell-card overflow-hidden p-3 xl:sticky xl:top-24">
-  <div class="rounded-[2rem] bg-[#eef1ff] p-4">
-    <iframe class="h-[calc(100vh-10rem)] min-h-[980px] w-full rounded-[1.5rem] border-0 bg-white shadow-2xl" [srcdoc]="previewHtml"></iframe>
+  <div #resumePaper class="h-[calc(100vh-10rem)] min-h-[980px] overflow-auto rounded-[2rem] bg-[#eef1ff] p-4">
+    <app-resume-template-renderer
+      *ngIf="document; else htmlPreview"
+      [document]="document"
+      [editable]="false">
+    </app-resume-template-renderer>
+
+    <ng-template #htmlPreview>
+      <iframe class="h-full min-h-[980px] w-full rounded-[1.5rem] border-0 bg-white shadow-2xl" [srcdoc]="previewHtml"></iframe>
+    </ng-template>
   </div>
 </section>

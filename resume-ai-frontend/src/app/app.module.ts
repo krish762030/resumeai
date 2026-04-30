@@ -34,8 +34,13 @@ import { TemplateSearchComponent } from './features/resume-builder/template-sear
 import { ResumeSectionRendererComponent } from './features/resume-builder/resume-section-renderer/resume-section-renderer.component';
 import { ResumeTemplateRendererComponent } from './features/resume-builder/resume-template-renderer/resume-template-renderer.component';
 import { ClassicResumeTemplateComponent } from './features/resume-builder/templates/classic-resume-template/classic-resume-template.component';
+import { AtsResumeTemplateComponent } from './features/resume-builder/templates/ats-resume-template/ats-resume-template.component';
+import { CompactResumeTemplateComponent } from './features/resume-builder/templates/compact-resume-template/compact-resume-template.component';
+import { CreativeResumeTemplateComponent } from './features/resume-builder/templates/creative-resume-template/creative-resume-template.component';
+import { DeveloperResumeTemplateComponent } from './features/resume-builder/templates/developer-resume-template/developer-resume-template.component';
 import { MinimalResumeTemplateComponent } from './features/resume-builder/templates/minimal-resume-template/minimal-resume-template.component';
 import { ModernResumeTemplateComponent } from './features/resume-builder/templates/modern-resume-template/modern-resume-template.component';
+import { ProfessionalResumeTemplateComponent } from './features/resume-builder/templates/professional-resume-template/professional-resume-template.component';
 import { AddSectionModalComponent } from './features/resume-editor/add-section-modal/add-section-modal.component';
 import { AiToolsPanelComponent } from './features/resume-editor/ai-tools-panel/ai-tools-panel.component';
 import { CustomizePanelComponent } from './features/resume-editor/customize-panel/customize-panel.component';
@@ -91,6 +96,11 @@ import { JoinListPipe } from './shared/pipes/join-list.pipe';
     ModernResumeTemplateComponent,
     ClassicResumeTemplateComponent,
     MinimalResumeTemplateComponent,
+    AtsResumeTemplateComponent,
+    DeveloperResumeTemplateComponent,
+    CompactResumeTemplateComponent,
+    CreativeResumeTemplateComponent,
+    ProfessionalResumeTemplateComponent,
     ResumeFormComponent,
     ResumePreviewComponent,
     ResumeEditorComponent,

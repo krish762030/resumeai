@@ -1,0 +1,64 @@
+<article class="resume-page resume-template-creative">
+  <aside class="resume-creative-sidebar">
+    <h1
+      [appContenteditableModel]="document.personal.fullName"
+      [appContenteditableEnabled]="editable"
+      (appContenteditableModelChange)="updatePersonal({ fullName: $event })">
+    </h1>
+    <p
+      class="resume-headline"
+      [appContenteditableModel]="document.personal.headline || ''"
+      [appContenteditableEnabled]="editable"
+      (appContenteditableModelChange)="updatePersonal({ headline: $event })">
+    </p>
+
+    <div class="resume-creative-contact">
+      <span
+        [appContenteditableModel]="document.personal.email"
+        [appContenteditableEnabled]="editable"
+        (appContenteditableModelChange)="updatePersonal({ email: $event })">
+      </span>
+      <span
+        [appContenteditableModel]="document.personal.phone"
+        [appContenteditableEnabled]="editable"
+        (appContenteditableModelChange)="updatePersonal({ phone: $event })">
+      </span>
+      <span
+        [appContenteditableModel]="document.personal.location || ''"
+        [appContenteditableEnabled]="editable"
+        (appContenteditableModelChange)="updatePersonal({ location: $event })">
+      </span>
+      <span
+        [appContenteditableModel]="document.personal.links || ''"
+        [appContenteditableEnabled]="editable"
+        (appContenteditableModelChange)="updatePersonal({ links: $event })">
+      </span>
+    </div>
+
+    <app-resume-section-renderer
+      *ngFor="let section of sidebarSections(document); trackBy: trackBySectionId"
+      [section]="section"
+      [editable]="editable"
+      (sectionChange)="updateSection($event)">
+    </app-resume-section-renderer>
+  </aside>
+
+  <main class="resume-creative-main">
+    <section class="resume-document-section">
+      <h2 class="resume-section-title">Profile</h2>
+      <p
+        class="resume-section-body resume-summary"
+        [appContenteditableModel]="document.personal.summary"
+        [appContenteditableEnabled]="editable"
+        (appContenteditableModelChange)="updatePersonal({ summary: $event })">
+      </p>
+    </section>
+
+    <app-resume-section-renderer
+      *ngFor="let section of mainSections(document); trackBy: trackBySectionId"
+      [section]="section"
+      [editable]="editable"
+      (sectionChange)="updateSection($event)">
+    </app-resume-section-renderer>
+  </main>
+</article>

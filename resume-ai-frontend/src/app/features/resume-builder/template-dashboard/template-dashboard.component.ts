@@ -22,7 +22,10 @@ export class TemplateDashboardComponent implements OnInit {
   favoriteIds = new Set<number>();
   usageLimit: UsageLimit | null = null;
   showUpgradeModal = false;
+  upgradeMessage = 'Your free plan includes only one resume. Upgrade to create another.';
+  error = '';
   importing = false;
+  creatingTemplateId: number | null = null;
   filters: TemplateFilterState = {
     roleType: '',
     experience: '',
@@ -120,12 +123,50 @@ export class TemplateDashboardComponent implements OnInit {
   }
 
   onUseTemplate(template: ResumeTemplate): void {
+    this.error = '';
+
     if (template.premium && !this.usageLimit?.premium) {
+      this.upgradeMessage = 'This template is premium. Upgrade to use premium templates.';
       this.showUpgradeModal = true;
       return;
     }
 
+    if (this.authService.isAuthenticated()) {
+      this.creatingTemplateId = template.id;
+      this.resumeService.createEditorResume({
+        templateId: template.id,
+        title: 'Untitled Resume'
+      }).subscribe({
+        next: (resume) => {
+          this.creatingTemplateId = null;
+          void this.router.navigate(['/resume-editor', resume.id, 'content']);
+        },
+        error: (error) => {
+          this.creatingTemplateId = null;
+          this.handleCreateError(error, template);
+        }
+      });
+      return;
+    }
+
     void this.router.navigate(['/resume-builder/create', template.id]);
+  }
+
+  private handleCreateError(error: any, template: ResumeTemplate): void {
+    const message = String(error?.error?.message ?? '');
+    const isPlanLimitError = message.toLowerCase().includes('free plan supports only 1')
+      || message.toLowerCase().includes('upgrade for more');
+    const isPremiumError = message.toLowerCase().includes('premium');
+
+    if (isPlanLimitError || (template.premium && isPremiumError)) {
+      this.upgradeMessage = isPremiumError
+        ? 'This template is premium. Upgrade to use premium templates.'
+        : 'Your free plan includes only one resume. Upgrade to create another.';
+      this.showUpgradeModal = true;
+      return;
+    }
+
+    this.error = message || 'Unable to open this template. Please try again.';
   }
 
   onImportResume(event: Event): void {

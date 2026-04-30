@@ -21,6 +21,41 @@
       (documentChange)="documentChange.emit($event)">
     </app-minimal-resume-template>
 
+    <app-ats-resume-template
+      *ngSwitchCase="'ats'"
+      [document]="doc"
+      [editable]="editable"
+      (documentChange)="documentChange.emit($event)">
+    </app-ats-resume-template>
+
+    <app-developer-resume-template
+      *ngSwitchCase="'developer'"
+      [document]="doc"
+      [editable]="editable"
+      (documentChange)="documentChange.emit($event)">
+    </app-developer-resume-template>
+
+    <app-compact-resume-template
+      *ngSwitchCase="'compact'"
+      [document]="doc"
+      [editable]="editable"
+      (documentChange)="documentChange.emit($event)">
+    </app-compact-resume-template>
+
+    <app-creative-resume-template
+      *ngSwitchCase="'creative'"
+      [document]="doc"
+      [editable]="editable"
+      (documentChange)="documentChange.emit($event)">
+    </app-creative-resume-template>
+
+    <app-professional-resume-template
+      *ngSwitchCase="'professional'"
+      [document]="doc"
+      [editable]="editable"
+      (documentChange)="documentChange.emit($event)">
+    </app-professional-resume-template>
+
     <app-modern-resume-template
       *ngSwitchDefault
       [document]="doc"
@@ -29,4 +64,3 @@
     </app-modern-resume-template>
   </div>
 </ng-container>
-

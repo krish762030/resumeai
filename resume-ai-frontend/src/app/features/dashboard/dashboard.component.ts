@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { forkJoin, of, switchMap } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { ResumeDocument } from '../../core/models/resume-document.model';
+import { createTemplatePreviewDocument } from '../../core/models/resume-document.utils';
 import { ResumeAnalysis } from '../../core/models/analysis.model';
 import { JobMatch } from '../../core/models/job.model';
 import { GeneratedResume, ResumeResponse, ResumeTemplate, UsageLimit } from '../../core/models/resume.model';
@@ -32,6 +34,7 @@ export class DashboardComponent implements OnInit {
   latestAnalysis: ResumeAnalysis | null = null;
   latestMatches: JobMatch[] = [];
   usageLimit: UsageLimit | null = null;
+  private readonly previewDocumentCache = new Map<number, ResumeDocument | null>();
   constructor(
     private readonly authService: AuthService,
     private readonly resumeService: ResumeService,
@@ -114,6 +117,13 @@ export class DashboardComponent implements OnInit {
       return ['/pricing'];
     }
     return ['/resume-builder/create', String(template.id)];
+  }
+
+  previewDocument(template: ResumeTemplate): ResumeDocument | null {
+    if (!this.previewDocumentCache.has(template.id)) {
+      this.previewDocumentCache.set(template.id, createTemplatePreviewDocument(template));
+    }
+    return this.previewDocumentCache.get(template.id) ?? null;
   }
 
   editorRoute(resumeId: number): string[] {

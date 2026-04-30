@@ -1,0 +1,41 @@
+.resume-template-professional {
+  display: grid;
+  align-content: start;
+  gap: 18px;
+  padding: 36px 44px;
+}
+
+.resume-professional-header {
+  border-bottom: 1px solid #9ca3af;
+  padding-bottom: 18px;
+  text-align: center;
+}
+
+.resume-professional-header h1 {
+  color: #111827;
+  font-size: 34px;
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.resume-professional-header .resume-headline {
+  color: #4b5563;
+}
+
+.resume-professional-header .resume-contact-line {
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.resume-template-professional .resume-section-title {
+  border-bottom: 1px solid color-mix(in srgb, var(--resume-primary), #ffffff 70%);
+  color: var(--resume-primary);
+  text-align: left;
+}
+
+.resume-professional-summary {
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 16px;
+}

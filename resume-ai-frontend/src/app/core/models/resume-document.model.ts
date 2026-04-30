@@ -1,4 +1,12 @@
-export type ResumeTemplateKey = 'modern' | 'classic' | 'minimal';
+export type ResumeTemplateKey =
+  | 'modern'
+  | 'classic'
+  | 'minimal'
+  | 'ats'
+  | 'developer'
+  | 'compact'
+  | 'creative'
+  | 'professional';
 
 export type ResumeSectionType = 'experience' | 'education' | 'skills' | 'projects' | 'custom';
 

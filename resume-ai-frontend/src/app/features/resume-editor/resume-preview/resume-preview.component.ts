@@ -1,11 +1,19 @@
-import { Component, Input } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { ResumeDocument } from '../../../core/models/resume-document.model';
 
 @Component({
   selector: 'app-resume-editor-preview',
   templateUrl: './resume-preview.component.html'
 })
 export class ResumeEditorPreviewComponent {
+  @ViewChild('resumePaper') resumePaper?: ElementRef<HTMLElement>;
+
+  @Input() document: ResumeDocument | null = null;
   @Input() html = '';
+
+  get resumeElement(): HTMLElement | null {
+    return this.resumePaper?.nativeElement.querySelector('.resume-page') as HTMLElement | null;
+  }
 
   get previewHtml(): string {
     return this.html?.trim() || `

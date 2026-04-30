@@ -1,0 +1,44 @@
+.resume-template-ats {
+  display: grid;
+  align-content: start;
+  gap: 17px;
+  padding: 34px 42px;
+}
+
+.resume-ats-header {
+  border-bottom: 3px solid var(--resume-primary);
+  padding-bottom: 15px;
+}
+
+.resume-ats-header h1 {
+  color: #111827;
+  font-size: 33px;
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: 0;
+}
+
+.resume-ats-header .resume-headline {
+  color: #374151;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.resume-ats-header .resume-contact-line {
+  margin-top: 10px;
+}
+
+.resume-template-ats .resume-section-title {
+  border-bottom: 1px solid #9ca3af;
+  color: #111827;
+}
+
+.resume-template-ats .resume-skill {
+  border-radius: 4px;
+  padding: 4px 7px;
+}
+
+.resume-ats-profile {
+  margin-top: 2px;
+}

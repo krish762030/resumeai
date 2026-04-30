@@ -175,7 +175,11 @@
       <div class="grid gap-5 md:grid-cols-3" *ngIf="recommendedTemplates.length > 0; else noTemplates">
         <article *ngFor="let template of recommendedTemplates" class="shell-card p-4">
           <div class="overflow-hidden rounded-[22px] bg-[#f8f9ff]">
-            <img [src]="template.previewImageUrl" [alt]="template.name" class="h-[320px] w-full object-cover object-top">
+            <div class="relative h-[320px] overflow-hidden bg-[#eef1ff]" *ngIf="previewDocument(template) as document">
+              <div class="absolute left-1/2 top-5 w-[210mm] origin-top -translate-x-1/2 scale-[0.27]">
+                <app-resume-template-renderer [document]="document" [editable]="false"></app-resume-template-renderer>
+              </div>
+            </div>
           </div>
           <div class="px-1 pb-1 pt-4">
             <div class="flex items-center justify-between gap-3">

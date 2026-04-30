@@ -1,0 +1,71 @@
+.resume-template-creative {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  align-content: stretch;
+}
+
+.resume-creative-sidebar {
+  display: grid;
+  align-content: start;
+  gap: 22px;
+  min-height: var(--resume-page-min-height);
+  padding: 32px 24px;
+  background: var(--resume-primary);
+  color: #ffffff;
+}
+
+.resume-creative-sidebar h1 {
+  color: #ffffff;
+  font-size: 31px;
+  font-weight: 850;
+  line-height: 1.06;
+  letter-spacing: 0;
+}
+
+.resume-creative-sidebar .resume-headline {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.resume-creative-contact {
+  display: grid;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.resume-creative-sidebar .resume-section-title {
+  border-bottom-color: rgba(255, 255, 255, 0.28);
+  color: #ffffff;
+}
+
+.resume-creative-sidebar .resume-section-body,
+.resume-creative-sidebar .resume-entry-summary,
+.resume-creative-sidebar .resume-entry ul,
+.resume-creative-sidebar .resume-entry-meta,
+.resume-creative-sidebar .resume-entry-heading strong,
+.resume-creative-sidebar .resume-entry-heading span {
+  color: rgba(255, 255, 255, 0.84);
+}
+
+.resume-creative-sidebar .resume-skill {
+  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.resume-creative-sidebar .resume-skill small {
+  color: rgba(255, 255, 255, 0.68);
+}
+
+.resume-creative-main {
+  display: grid;
+  align-content: start;
+  gap: var(--resume-section-gap);
+  padding: 34px 38px 38px;
+}
+
+.resume-template-creative .resume-creative-main .resume-section-title {
+  border-bottom: 0;
+  color: var(--resume-secondary);
+  padding-bottom: 0;
+}

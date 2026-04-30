@@ -1,14 +1,20 @@
 import { ResumeTemplate } from './resume.model';
+import { ResumeEditorResume, ResumeSection, ResumeTheme } from './resume.model';
 import {
   CustomSection,
+  CustomSectionItem,
+  Education,
   EducationSection,
+  Project,
   ProjectsSection,
   ResumeDocument,
   ResumeDocumentSection,
   ResumeThemeConfig,
   ResumeTemplateKey,
+  Skill,
   SkillsSection,
   SkillLevel,
+  WorkExperience,
   WorkExperienceSection
 } from './resume-document.model';
 
@@ -20,8 +26,27 @@ export function templateKeyFromTemplate(template: ResumeTemplate | null | undefi
   const key = template?.templateKey?.toLowerCase() ?? '';
   const style = template?.styleType?.toLowerCase() ?? '';
   const layout = template?.layoutType?.toLowerCase() ?? '';
+  const category = template?.category?.toLowerCase() ?? '';
+  const role = template?.roleType?.toLowerCase() ?? '';
+  const name = template?.name?.toLowerCase() ?? '';
+  const signal = [key, style, layout, category, role, name].join(' ');
 
-  if (key.includes('classic') || style.includes('clean') || style.includes('compact')) {
+  if (signal.includes('creative')) {
+    return 'creative';
+  }
+  if (signal.includes('compact') || key.includes('professional-one-page')) {
+    return 'compact';
+  }
+  if (signal.includes('ats') || signal.includes('internship')) {
+    return 'ats';
+  }
+  if (signal.includes('java') || signal.includes('backend') || signal.includes('developer') || signal.includes('analyst')) {
+    return layout.includes('two') || key.includes('fullstack') ? 'modern' : 'developer';
+  }
+  if (signal.includes('mba') || signal.includes('professional')) {
+    return 'professional';
+  }
+  if (key.includes('classic') || style.includes('clean')) {
     return 'classic';
   }
   if (key.includes('minimal') || style.includes('minimal')) {
@@ -183,6 +208,36 @@ export function createTemplatePreviewDocument(template: ResumeTemplate | null | 
       ...document.theme,
       ...previewThemeForTemplate(template)
     }
+  };
+}
+
+export function createResumeDocumentFromEditorResume(
+  resume: ResumeEditorResume,
+  template?: ResumeTemplate | null
+): ResumeDocument {
+  const summarySection = resume.sections.find((section) => section.sectionType === 'SUMMARY');
+  const summaryContent = summarySection ? parseRecord(summarySection.contentJson) : {};
+  const templateKey = templateKeyFromEditorResume(resume, template);
+
+  return {
+    schemaVersion: 1,
+    title: resume.title || 'Untitled Resume',
+    templateKey,
+    personal: {
+      fullName: stringValue(summaryContent['fullName'], 'Candidate Name'),
+      headline: stringValue(summaryContent['headline'], 'Professional Headline'),
+      email: stringValue(summaryContent['email']),
+      phone: stringValue(summaryContent['phone']),
+      location: stringValue(summaryContent['location']),
+      links: stringValue(summaryContent['links']),
+      summary: stringValue(summaryContent['text'], 'Add a short professional summary here.')
+    },
+    theme: themeConfigFromEditor(resume.themeJson, template),
+    sections: resume.sections
+      .filter((section) => section.isVisible && section.sectionType !== 'SUMMARY')
+      .sort((left, right) => left.sectionOrder - right.sectionOrder)
+      .map((section, index) => editorSectionToDocumentSection(section, index)),
+    updatedAt: resume.updatedAt
   };
 }
 
@@ -415,6 +470,224 @@ function stringValue(value: unknown, fallback = ''): string {
   return typeof value === 'string' && value.trim().length > 0 ? value : fallback;
 }
 
+function templateKeyFromEditorResume(
+  resume: ResumeEditorResume,
+  template?: ResumeTemplate | null
+): ResumeTemplateKey {
+  if (template) {
+    return templateKeyFromTemplate(template);
+  }
+
+  return templateKeyFromTemplate({
+    id: resume.templateId,
+    name: resume.templateName,
+    category: '',
+    roleType: '',
+    experienceLevel: '',
+    layoutType: resume.templateLayoutType,
+    styleType: resume.templateStyleType,
+    atsFriendly: false,
+    tagsJson: '[]',
+    previewImageUrl: '',
+    templateKey: resume.templateKey,
+    htmlTemplatePath: '',
+    cssTemplatePath: '',
+    supportedSectionsJson: resume.templateSupportedSectionsJson,
+    premium: resume.premiumTemplate
+  });
+}
+
+function themeConfigFromEditor(themeJson: string, template?: ResumeTemplate | null): ResumeThemeConfig {
+  const parsed = parseRecord(themeJson) as Partial<ResumeTheme>;
+  const previewTheme = template ? previewThemeForTemplate(template) : {};
+  const primaryColor = stringValue(parsed['headerColor'], stringValue(parsed['primaryColor'], previewTheme.primaryColor ?? '#1f4f46'));
+
+  return {
+    fontFamily: stringValue(parsed['fontFamily'], 'Source Sans Pro'),
+    primaryColor,
+    secondaryColor: stringValue(parsed['primaryColor'], previewTheme.secondaryColor ?? '#d97706'),
+    textColor: '#111827',
+    sectionSpacing: 16,
+    pageSize: 'A4'
+  };
+}
+
+function editorSectionToDocumentSection(section: ResumeSection, index: number): ResumeDocumentSection {
+  const content = parseRecord(section.contentJson);
+  const base = {
+    id: `section-${section.id}`,
+    title: section.sectionTitle,
+    visible: section.isVisible,
+    order: section.sectionOrder || (index + 1) * 10
+  };
+
+  switch (section.sectionType) {
+    case 'EXPERIENCE':
+      return {
+        ...base,
+        type: 'experience',
+        items: arrayValue(content['items']).map((item, itemIndex) => editorExperienceItem(section.id, item, itemIndex))
+      };
+    case 'EDUCATION':
+      return {
+        ...base,
+        type: 'education',
+        items: arrayValue(content['items']).map((item, itemIndex) => editorEducationItem(section.id, item, itemIndex))
+      };
+    case 'SKILLS':
+      return {
+        ...base,
+        type: 'skills',
+        items: editorSkillItems(section.id, content)
+      };
+    case 'PROJECTS':
+      return {
+        ...base,
+        type: 'projects',
+        items: arrayValue(content['items']).map((item, itemIndex) => editorProjectItem(section.id, item, itemIndex))
+      };
+    default:
+      return {
+        ...base,
+        type: 'custom',
+        items: editorCustomItems(section.id, section.sectionType, content)
+      };
+  }
+}
+
+function editorExperienceItem(sectionId: number, value: unknown, index: number): WorkExperience {
+  const item = recordValue(value);
+  return {
+    id: `experience-${sectionId}-${index}`,
+    company: stringValue(item['company'], 'Company Name'),
+    position: stringValue(item['role'], stringValue(item['position'], 'Role Title')),
+    location: stringValue(item['location']),
+    startDate: stringValue(item['startDate']),
+    endDate: stringValue(item['endDate'], 'Present'),
+    summary: '',
+    highlights: textList(item['description'])
+  };
+}
+
+function editorEducationItem(sectionId: number, value: unknown, index: number): Education {
+  const item = recordValue(value);
+  return {
+    id: `education-${sectionId}-${index}`,
+    institution: stringValue(item['institute'], stringValue(item['institution'], 'Institute Name')),
+    degree: stringValue(item['degree'], 'Degree Name'),
+    field: stringValue(item['field']),
+    location: stringValue(item['location']),
+    startDate: stringValue(item['startDate']),
+    endDate: stringValue(item['endDate']),
+    score: stringValue(item['score'])
+  };
+}
+
+function editorSkillItems(sectionId: number, content: Record<string, unknown>): Skill[] {
+  const groups = arrayValue(content['groups']);
+  if (!groups.length) {
+    return textList(content['skills']).map((name, index) => ({
+      id: `skill-${sectionId}-${index}`,
+      name,
+      level: 'intermediate'
+    }));
+  }
+
+  return groups.flatMap((group, groupIndex) => {
+    const record = recordValue(group);
+    return textList(record['skills']).map((name, skillIndex) => ({
+      id: `skill-${sectionId}-${groupIndex}-${skillIndex}`,
+      name,
+      level: skillLevelFromText(record['title'])
+    }));
+  });
+}
+
+function editorProjectItem(sectionId: number, value: unknown, index: number): Project {
+  const item = recordValue(value);
+  const subtitle = stringValue(item['subtitle'], stringValue(item['role']));
+  return {
+    id: `project-${sectionId}-${index}`,
+    name: stringValue(item['title'], stringValue(item['name'], 'Project Name')),
+    role: subtitle,
+    url: stringValue(item['url']),
+    startDate: stringValue(item['startDate']),
+    endDate: stringValue(item['endDate']),
+    description: textList(item['description']).join(' '),
+    technologies: textList(item['technologies']).length ? textList(item['technologies']) : splitCommaList(subtitle)
+  };
+}
+
+function editorCustomItems(sectionId: number, sectionType: string, content: Record<string, unknown>): CustomSectionItem[] {
+  return arrayValue(content['items']).map((value, index) => {
+    const item = recordValue(value);
+    if (sectionType === 'LANGUAGES') {
+      return {
+        id: `custom-${sectionId}-${index}`,
+        title: stringValue(item['name'], 'Language'),
+        subtitle: stringValue(item['level']),
+        description: ''
+      };
+    }
+
+    return {
+      id: `custom-${sectionId}-${index}`,
+      title: stringValue(item['title'], stringValue(item['name'], 'Item')),
+      subtitle: [stringValue(item['subtitle']), stringValue(item['issuer']), stringValue(item['year'])]
+        .filter(Boolean)
+        .join(' | '),
+      description: textList(item['description']).join(' ')
+    };
+  });
+}
+
+function parseRecord(json: string): Record<string, unknown> {
+  try {
+    return recordValue(JSON.parse(json));
+  } catch {
+    return {};
+  }
+}
+
+function recordValue(value: unknown): Record<string, unknown> {
+  return value && typeof value === 'object' && !Array.isArray(value) ? value as Record<string, unknown> : {};
+}
+
+function arrayValue(value: unknown): unknown[] {
+  return Array.isArray(value) ? value : [];
+}
+
+function textList(value: unknown): string[] {
+  if (Array.isArray(value)) {
+    return value.map((item) => String(item ?? '').trim()).filter(Boolean);
+  }
+  if (typeof value === 'string' && value.trim()) {
+    return [value.trim()];
+  }
+  return [];
+}
+
+function splitCommaList(value: string): string[] {
+  return value
+    .split(',')
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+function skillLevelFromText(value: unknown): SkillLevel {
+  const normalized = String(value ?? '').toLowerCase();
+  if (normalized.includes('expert')) {
+    return 'expert';
+  }
+  if (normalized.includes('advanced')) {
+    return 'advanced';
+  }
+  if (normalized.includes('beginner')) {
+    return 'beginner';
+  }
+  return 'intermediate';
+}
+
 function previewThemeForTemplate(template: ResumeTemplate): Partial<ResumeThemeConfig> {
   const templateSignal = [
     template.templateKey,
@@ -426,8 +699,8 @@ function previewThemeForTemplate(template: ResumeTemplate): Partial<ResumeThemeC
 
   if (templateSignal.includes('creative')) {
     return {
-      primaryColor: '#f45b7a',
-      secondaryColor: '#17172b'
+      primaryColor: '#8f2d56',
+      secondaryColor: '#c2410c'
     };
   }
 
@@ -439,11 +712,26 @@ function previewThemeForTemplate(template: ResumeTemplate): Partial<ResumeThemeC
     };
   }
 
+  if (templateSignal.includes('ats')) {
+    return {
+      primaryColor: '#111827',
+      secondaryColor: '#374151',
+      sectionSpacing: 14
+    };
+  }
+
   if (templateSignal.includes('minimal') || templateSignal.includes('internship')) {
     return {
       primaryColor: '#111827',
       secondaryColor: '#64748b',
       sectionSpacing: 16
+    };
+  }
+
+  if (templateSignal.includes('professional') || templateSignal.includes('mba')) {
+    return {
+      primaryColor: '#1f2937',
+      secondaryColor: '#9a3412'
     };
   }
 
